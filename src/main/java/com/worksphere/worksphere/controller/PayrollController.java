@@ -53,11 +53,13 @@ public class PayrollController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     public Payroll getPayrollById(@PathVariable Long id) {
         return payrollService.getPayrollById(id);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     public String deletePayroll(@PathVariable Long id) {
         payrollService.deletePayroll(id);
         return "Payroll deleted successfully";
