@@ -4,10 +4,12 @@ import com.worksphere.worksphere.dto.LoginRequest;
 import com.worksphere.worksphere.dto.LoginResponse;
 import com.worksphere.worksphere.entity.User;
 import com.worksphere.worksphere.service.UserService;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     private final UserService userService;

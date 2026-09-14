@@ -3,7 +3,9 @@ package com.worksphere.worksphere.controller;
 import com.worksphere.worksphere.entity.Attendance;
 import com.worksphere.worksphere.service.AttendanceService;
 import org.springframework.web.bind.annotation.*;
-
+import com.worksphere.worksphere.entity.Employee;
+import com.worksphere.worksphere.repository.EmployeeRepository;
+import org.springframework.security.core.Authentication;
 import java.util.List;
 
 @RestController
@@ -11,9 +13,12 @@ import java.util.List;
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
+    private final EmployeeRepository employeeRepository;
 
-    public AttendanceController(AttendanceService attendanceService) {
+    public AttendanceController(AttendanceService attendanceService,
+                                EmployeeRepository employeeRepository) {
         this.attendanceService = attendanceService;
+        this.employeeRepository = employeeRepository;
     }
 
     @PostMapping
@@ -40,5 +45,20 @@ public class AttendanceController {
     @GetMapping("/employee/{employeeId}")
     public List<Attendance> getAttendanceByEmployeeId(@PathVariable Long employeeId) {
         return attendanceService.getAttendanceByEmployeeId(employeeId);
+    }
+    @GetMapping("/my")
+    public List<Attendance> getMyAttendance(Authentication authentication) {
+
+        String email = authentication.getName();
+
+        Employee employee = employeeRepository
+                .findByEmail(email)
+                .orElse(null);
+
+        if (employee == null) {
+            throw new RuntimeException("Employee not found");
+        }
+
+        return attendanceService.getAttendanceByEmployeeId(employee.getId());
     }
 }
