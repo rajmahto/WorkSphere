@@ -472,3 +472,388 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================= */
+/* Attendance Page */
+/* ============================= */
+
+.attendance-page {
+    padding: 42px 50px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+
+/* Header */
+
+.attendance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 35px;
+}
+
+.attendance-header h1 {
+    margin: 0;
+    font-size: 36px;
+    color: #0d2d4f;
+}
+
+.attendance-header p {
+    margin: 8px 0 0;
+    color: #607d9b;
+    font-size: 18px;
+}
+
+.back-dashboard-button {
+    border: none;
+    background: transparent;
+    color: #52789e;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 12px;
+}
+
+.back-dashboard-button:hover {
+    color: #0d2d4f;
+}
+
+.mark-attendance-button {
+    background: #0d2d4f;
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 18px;
+}
+
+.mark-attendance-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+}
+
+.mark-attendance-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* Mark Attendance Button */
+
+.mark-attendance-button {
+    background: #0d2d4f;
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.mark-attendance-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+}
+
+
+/* Summary Cards */
+
+.attendance-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.attendance-status-card,
+.attendance-time-card {
+    background: white;
+    border: 1px solid #dbe4ee;
+    border-radius: 14px;
+    padding: 26px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 14px rgba(13, 45, 79, 0.05);
+}
+
+.attendance-icon,
+.time-icon {
+    width: 58px;
+    height: 58px;
+    border-radius: 12px;
+    background: #edf4fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: #0d2d4f;
+    flex-shrink: 0;
+}
+
+.attendance-status-card span,
+.attendance-time-card span {
+    color: #66809d;
+    font-size: 15px;
+}
+
+.attendance-status-card h2,
+.attendance-time-card h2 {
+    margin: 7px 0 0;
+    color: #0d2d4f;
+    font-size: 24px;
+}
+
+
+/* History */
+
+.attendance-history {
+    background: white;
+    border: 1px solid #dbe4ee;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 4px 14px rgba(13, 45, 79, 0.05);
+}
+
+.attendance-history-header {
+    margin-bottom: 24px;
+}
+
+.attendance-history-header h2 {
+    margin: 0;
+    color: #0d2d4f;
+    font-size: 25px;
+}
+
+.attendance-history-header p {
+    margin: 7px 0 0;
+    color: #66809d;
+}
+
+
+/* Table */
+
+.attendance-table-container {
+    overflow-x: auto;
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.attendance-table th {
+    text-align: left;
+    padding: 15px;
+    background: #f5f8fb;
+    color: #506b88;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.attendance-table td {
+    padding: 17px 15px;
+    border-bottom: 1px solid #e6edf3;
+    color: #173653;
+    font-size: 15px;
+}
+
+.attendance-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.attendance-table tbody tr:hover {
+    background: #fafcff;
+}
+
+
+/* Status */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-badge.present {
+    background: #e8f7ee;
+    color: #178544;
+}
+
+.status-badge.absent {
+    background: #fdecec;
+    color: #c0392b;
+}
+
+.status-badge.late {
+    background: #fff4df;
+    color: #b9770e;
+}
+ .status-badge.completed {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* Empty / Loading */
+
+.table-message {
+    text-align: center;
+    padding: 35px !important;
+    color: #71869d !important;
+}
+
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+    .attendance-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .attendance-header {
+        align-items: flex-start;
+        gap: 20px;
+        flex-direction: column;
+    }
+
+    .attendance-page {
+        padding: 30px 25px;
+    }
+}
+
+/* ============================= */
+/* Notification */
+/* ============================= */
+
+.notification {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    min-width: 340px;
+    max-width: 420px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 16px 18px;
+
+    background: #ffffff;
+    border-radius: 14px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+    z-index: 9999;
+
+    animation: notificationSlideIn 0.3s ease;
+}
+
+/* Success */
+
+.notification.success {
+    border-left: 5px solid #198754;
+}
+
+/* Error */
+
+.notification.error {
+    border-left: 5px solid #dc3545;
+}
+
+/* Info */
+
+.notification.info {
+    border-left: 5px solid #0d6efd;
+}
+
+/* Icon */
+
+.notification-icon {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eef4f9;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    color: #0d3154;
+
+    flex-shrink: 0;
+}
+
+/* Content */
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content strong {
+    display: block;
+
+    font-size: 15px;
+    color: #0d3154;
+
+    margin-bottom: 3px;
+}
+
+.notification-content p {
+    margin: 0;
+
+    font-size: 14px;
+    color: #64748b;
+
+    line-height: 1.4;
+}
+
+/* Close button */
+
+.notification-close {
+    border: none;
+    background: transparent;
+
+    font-size: 22px;
+    color: #94a3b8;
+
+    cursor: pointer;
+
+    padding: 2px 5px;
+}
+
+.notification-close:hover {
+    color: #0d3154;
+}
+
+/* Animation */
+
+@keyframes notificationSlideIn {
+
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+}

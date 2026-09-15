@@ -20,9 +20,12 @@ public class Attendance {
 
     private String status;
 
+    private Long workingMinutes;
+
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
+
 
     public Long getId() {
         return id;
@@ -64,6 +67,14 @@ public class Attendance {
         this.status = status;
     }
 
+    public Long getWorkingMinutes() {
+        return workingMinutes;
+    }
+
+    public void setWorkingMinutes(Long workingMinutes) {
+        this.workingMinutes = workingMinutes;
+    }
+
     public Employee getEmployee() {
         return employee;
     }
@@ -71,5 +82,4 @@ public class Attendance {
     public void setEmployee(Employee employee) {
         this.employee = employee;
     }
-
 }
