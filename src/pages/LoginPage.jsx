@@ -1,31 +1,44 @@
 import { useState } from "react";
-import DashboardPage from "./DashboardPage";
 import "../App.css";
+import Notification from "../components/Notification";
 
-function LoginPage() {
+function LoginPage({ onLogin }) {
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loggedIn, setLoggedIn] = useState(false);
+
+    const [notification, setNotification] = useState(null);
 
     const handleLogin = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                })
-            });
+
+            const response = await fetch(
+                "http://localhost:8080/users/login",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                }
+            );
 
             const data = await response.json();
 
             if (!response.ok) {
-                alert(data.message || "Login failed");
+
+                setNotification({
+                    type: "error",
+                    message: data.message || "Login failed"
+                });
+
                 return;
             }
 
@@ -35,29 +48,49 @@ function LoginPage() {
             localStorage.setItem("role", data.role);
             localStorage.setItem("email", data.email);
 
-            alert("Login successful!");
+            /*
+             * Login successful.
+             * Notification App component ko bhej rahe hain
+             * because LoginPage login ke baad unmount ho jayega.
+             */
 
-            setLoggedIn(true);
+            onLogin({
+                type: "success",
+                message: "Welcome back to WorkSphere!"
+            });
 
         } catch (error) {
+
             console.error("Login error:", error);
-            alert("Unable to connect to server");
+
+            setNotification({
+                type: "error",
+                message: "Unable to connect to server"
+            });
         }
     };
 
-    if (loggedIn) {
-        return <DashboardPage />;
-    }
-
     return (
         <div className="login-page">
+
+            {/* Login error notification */}
+            {notification && (
+                <Notification
+                    type={notification.type}
+                    message={notification.message}
+                    onClose={() => setNotification(null)}
+                />
+            )}
+
             <div className="login-card">
 
                 <div className="logo">
                     WorkSphere
                 </div>
 
-                <h1>Welcome Back</h1>
+                <h1>
+                    Welcome Back
+                </h1>
 
                 <p className="subtitle">
                     Sign in to your employee workspace
@@ -65,23 +98,31 @@ function LoginPage() {
 
                 <form onSubmit={handleLogin}>
 
-                    <label>Email</label>
+                    <label>
+                        Email
+                    </label>
 
                     <input
                         type="email"
                         placeholder="Enter your email"
                         value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        onChange={(event) =>
+                            setEmail(event.target.value)
+                        }
                         required
                     />
 
-                    <label>Password</label>
+                    <label>
+                        Password
+                    </label>
 
                     <input
                         type="password"
                         placeholder="Enter your password"
                         value={password}
-                        onChange={(event) => setPassword(event.target.value)}
+                        onChange={(event) =>
+                            setPassword(event.target.value)
+                        }
                         required
                     />
 
@@ -92,6 +133,7 @@ function LoginPage() {
                 </form>
 
             </div>
+
         </div>
     );
 }
