@@ -4,6 +4,8 @@ import com.worksphere.worksphere.entity.Leave;
 import com.worksphere.worksphere.repository.LeaveRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -29,6 +31,10 @@ public class LeaveService {
         return leaveRepository.findAll();
     }
 
+    public List<Leave> getPendingLeaves() {
+        return leaveRepository.findByStatus("PENDING");
+    }
+
     public Leave getLeaveById(Long id) {
         return leaveRepository.findById(id).orElse(null);
     }
@@ -45,11 +51,14 @@ public class LeaveService {
         if (leave == null) {
             return null;
         }
-        if ("APPROVED".equals(leave.getStatus())) {
-            throw new RuntimeException("Leave is already approved");
+
+        if (!"PENDING".equals(leave.getStatus())) {
+            throw new RuntimeException(
+                    "Only pending leave can be approved"
+            );
         }
 
-        long days = java.time.temporal.ChronoUnit.DAYS.between(
+        long days = ChronoUnit.DAYS.between(
                 leave.getStartDate(),
                 leave.getEndDate()
         ) + 1;
@@ -66,13 +75,24 @@ public class LeaveService {
     }
 
     public Leave rejectLeave(Long id) {
+
         Leave leave = leaveRepository.findById(id).orElse(null);
 
-        if (leave != null) {
-            leave.setStatus("REJECTED");
-            return leaveRepository.save(leave);
+        if (leave == null) {
+            return null;
         }
 
-        return null;
+        if (!"PENDING".equals(leave.getStatus())) {
+            throw new RuntimeException(
+                    "Only pending leave can be rejected"
+            );
+        }
+
+        leave.setStatus("REJECTED");
+
+        return leaveRepository.save(leave);
+    }
+    public List<Leave> getLeavesByEmployeeId(Long employeeId) {
+        return leaveRepository.findByEmployeeId(employeeId);
     }
 }

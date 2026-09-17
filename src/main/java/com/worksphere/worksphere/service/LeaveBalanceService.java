@@ -34,6 +34,11 @@ public class LeaveBalanceService {
                 .orElse(null);
     }
 
+    public List<LeaveBalance> getLeaveBalancesByEmployeeId(Long employeeId) {
+
+        return leaveBalanceRepository.findByEmployeeId(employeeId);
+    }
+
     public void deductLeave(Long employeeId, String leaveType, int days) {
 
         LeaveBalance balance = getBalance(employeeId, leaveType);

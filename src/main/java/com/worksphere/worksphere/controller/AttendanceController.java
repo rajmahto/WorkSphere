@@ -1,11 +1,12 @@
 package com.worksphere.worksphere.controller;
 
 import com.worksphere.worksphere.entity.Attendance;
-import com.worksphere.worksphere.service.AttendanceService;
-import org.springframework.web.bind.annotation.*;
 import com.worksphere.worksphere.entity.Employee;
 import com.worksphere.worksphere.repository.EmployeeRepository;
+import com.worksphere.worksphere.service.AttendanceService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,7 +25,11 @@ public class AttendanceController {
         this.employeeRepository = employeeRepository;
     }
 
+    // =========================
+    // HR / ADMIN
+    // =========================
 
+    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
     @PostMapping
     public Attendance saveAttendance(
             @RequestBody Attendance attendance) {
@@ -32,14 +37,14 @@ public class AttendanceController {
         return attendanceService.saveAttendance(attendance);
     }
 
-
+    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
     @GetMapping
     public List<Attendance> getAllAttendance() {
 
         return attendanceService.getAllAttendance();
     }
 
-
+    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
     @GetMapping("/{id}")
     public Attendance getAttendanceById(
             @PathVariable Long id) {
@@ -47,7 +52,7 @@ public class AttendanceController {
         return attendanceService.getAttendanceById(id);
     }
 
-
+    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
     @DeleteMapping("/{id}")
     public String deleteAttendance(
             @PathVariable Long id) {
@@ -57,7 +62,7 @@ public class AttendanceController {
         return "Attendance deleted successfully";
     }
 
-
+    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
     @GetMapping("/employee/{employeeId}")
     public List<Attendance> getAttendanceByEmployeeId(
             @PathVariable Long employeeId) {
@@ -66,7 +71,11 @@ public class AttendanceController {
                 .getAttendanceByEmployeeId(employeeId);
     }
 
+    // =========================
+    // EMPLOYEE
+    // =========================
 
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/my")
     public List<Attendance> getMyAttendance(
             Authentication authentication) {
@@ -85,7 +94,7 @@ public class AttendanceController {
                 .getAttendanceByEmployeeId(employee.getId());
     }
 
-
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PostMapping("/my")
     public Attendance markMyAttendance(
             Authentication authentication) {
@@ -110,7 +119,7 @@ public class AttendanceController {
         return attendanceService.saveAttendance(attendance);
     }
 
-
+    @PreAuthorize("hasRole('EMPLOYEE')")
     @PutMapping("/my/checkout")
     public Attendance checkOut(
             Authentication authentication) {
