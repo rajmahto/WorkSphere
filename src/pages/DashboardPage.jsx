@@ -1,78 +1,108 @@
 import { useEffect, useState } from "react";
+import {
+    LayoutDashboard,
+    ClipboardCheck,
+    FileText,
+    WalletCards,
+    UserCircle,
+    LogOut,
+    ChevronRight,
+    CheckCircle2,
+    Clock3,
+    Sparkles
+} from "lucide-react";
+
 import AttendancePage from "./AttendancePage";
+import LeavePage from "./LeavePage";
+import PayrollPage from "./PayrollPage";
 import "../App.css";
 
-function DashboardPage({ onNotify }) {
+function DashboardPage({ onLogout, onNotify }) {
 
     const email = localStorage.getItem("email");
-    const role = localStorage.getItem("role");
     const token = localStorage.getItem("token");
 
     const [attendance, setAttendance] = useState([]);
     const [payroll, setPayroll] = useState(null);
-
+    const [balances, setBalances] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [currentPage, setCurrentPage] = useState(
         () => localStorage.getItem("currentPage") || "dashboard"
     );
 
-
-    // Save current page
     useEffect(() => {
         localStorage.setItem("currentPage", currentPage);
     }, [currentPage]);
 
-
-    // Fetch Dashboard Data
     useEffect(() => {
 
         const fetchDashboardData = async () => {
 
             try {
 
-                // Attendance
-                const attendanceResponse = await fetch(
-                    "http://localhost:8080/attendance/my",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
+                const headers = {
+                    Authorization: `Bearer ${token}`
+                };
+
+                const [
+                    attendanceResponse,
+                    payrollResponse,
+                    balanceResponse
+                ] = await Promise.all([
+                    fetch(
+                        "http://localhost:8080/attendance/my",
+                        { headers }
+                    ),
+                    fetch(
+                        "http://localhost:8080/payrolls/my",
+                        { headers }
+                    ),
+                    fetch(
+                        "http://localhost:8080/leave-balances/my",
+                        { headers }
+                    )
+                ]);
 
                 if (attendanceResponse.ok) {
 
                     const attendanceData =
                         await attendanceResponse.json();
 
-                    setAttendance(attendanceData);
+                    setAttendance(
+                        Array.isArray(attendanceData)
+                            ? attendanceData
+                            : []
+                    );
                 }
-
-
-                // Payroll
-                const payrollResponse = await fetch(
-                    "http://localhost:8080/payrolls/my",
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
 
                 if (payrollResponse.ok) {
 
                     const payrollData =
                         await payrollResponse.json();
 
-                    if (payrollData.length > 0) {
+                    const payrollList =
+                        Array.isArray(payrollData)
+                            ? payrollData
+                            : [payrollData];
 
-                        // Latest payroll
-                        const latestPayroll =
-                            payrollData[payrollData.length - 1];
-
-                        setPayroll(latestPayroll);
+                    if (payrollList.length > 0) {
+                        setPayroll(
+                            payrollList[payrollList.length - 1]
+                        );
                     }
+                }
+
+                if (balanceResponse.ok) {
+
+                    const balanceData =
+                        await balanceResponse.json();
+
+                    setBalances(
+                        Array.isArray(balanceData)
+                            ? balanceData
+                            : []
+                    );
                 }
 
             } catch (error) {
@@ -82,6 +112,11 @@ function DashboardPage({ onNotify }) {
                     error
                 );
 
+                onNotify({
+                    type: "error",
+                    message: "Unable to load dashboard data."
+                });
+
             } finally {
 
                 setLoading(false);
@@ -90,41 +125,39 @@ function DashboardPage({ onNotify }) {
 
         fetchDashboardData();
 
-    }, [token]);
+    }, [token, onNotify]);
 
-
-    // Latest attendance record
     const latestAttendance =
         attendance.length > 0
             ? attendance[attendance.length - 1]
             : null;
 
-
-    // Attendance status
     const attendanceStatus =
         latestAttendance?.status || "No Data";
 
+    const latestSalary = payroll?.netSalary
+        ? new Intl.NumberFormat("en-IN", {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0
+        }).format(payroll.netSalary)
+        : "No Data";
 
-    // Latest salary
-    const latestSalary =
-        payroll?.netSalary
-            ? `₹${payroll.netSalary.toLocaleString("en-IN")}`
-            : "No Data";
+    const totalRemainingLeaves =
+        balances.reduce(
+            (total, balance) =>
+                total + (balance.remainingLeaves || 0),
+            0
+        );
 
-
-    // Logout
-    const handleLogout = () => {
-
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        localStorage.removeItem("role");
-        localStorage.removeItem("currentPage");
-
-        window.location.reload();
+    const handleNavigation = (page) => {
+        setCurrentPage(page);
     };
 
+    /*
+     * Employee sub-pages
+     */
 
-    // Attendance Page
     if (currentPage === "attendance") {
 
         return (
@@ -135,65 +168,147 @@ function DashboardPage({ onNotify }) {
         );
     }
 
+    if (currentPage === "leave") {
+
+        return (
+            <LeavePage
+                onNotify={onNotify}
+                onBack={() => setCurrentPage("dashboard")}
+            />
+        );
+    }
+
+    if (currentPage === "payroll") {
+
+        return (
+            <PayrollPage
+                onNotify={onNotify}
+                onBack={() => setCurrentPage("dashboard")}
+            />
+        );
+    }
 
     return (
-        <div className="dashboard-page">
+
+        <div className="hr-dashboard-container">
 
             {/* Sidebar */}
-            <aside className="sidebar">
 
-                <div className="sidebar-logo">
-                    WorkSphere
+            <aside className="hr-sidebar">
+
+                <div className="hr-brand">
+                    <div className="hr-brand-icon">WS</div>
+
+                    <span>
+                        WorkSphere
+                    </span>
                 </div>
-
-
-                <nav className="sidebar-menu">
+                <nav className="hr-sidebar-nav">
 
                     <button
-                        className="menu-item active"
-                        onClick={() => setCurrentPage("dashboard")}
+                        type="button"
+                        className={`hr-nav-item ${currentPage === "dashboard"
+                                ? "active"
+                                : ""
+                            }`}
+                        onClick={() =>
+                            handleNavigation("dashboard")
+                        }
                     >
-                        Dashboard
+                        <LayoutDashboard
+                            size={19}
+                            strokeWidth={2}
+                        />
+
+                        <span>Dashboard</span>
                     </button>
 
 
                     <button
-                        className="menu-item"
-                        onClick={() => setCurrentPage("attendance")}
+                        type="button"
+                        className={`hr-nav-item ${currentPage === "attendance"
+                                ? "active"
+                                : ""
+                            }`}
+                        onClick={() =>
+                            handleNavigation("attendance")
+                        }
                     >
-                        Attendance
+                        <ClipboardCheck
+                            size={19}
+                            strokeWidth={2}
+                        />
+
+                        <span>Attendance</span>
                     </button>
 
 
-                    <button className="menu-item">
-                        Leave
+                    <button
+                        type="button"
+                        className={`hr-nav-item ${currentPage === "leave"
+                                ? "active"
+                                : ""
+                            }`}
+                        onClick={() =>
+                            handleNavigation("leave")
+                        }
+                    >
+                        <FileText
+                            size={19}
+                            strokeWidth={2}
+                        />
+
+                        <span>Leave</span>
                     </button>
 
 
-                    <button className="menu-item">
-                        Payroll
+                    <button
+                        type="button"
+                        className={`hr-nav-item ${currentPage === "payroll"
+                                ? "active"
+                                : ""
+                            }`}
+                        onClick={() =>
+                            handleNavigation("payroll")
+                        }
+                    >
+                        <WalletCards
+                            size={19}
+                            strokeWidth={2}
+                        />
+
+                        <span>Payroll</span>
                     </button>
 
 
-                    <button className="menu-item">
-                        Profile
+                    <button
+                        type="button"
+                        className="hr-nav-item"
+                    >
+                        <UserCircle
+                            size={19}
+                            strokeWidth={2}
+                        />
+
+                        <span>Profile</span>
                     </button>
 
                 </nav>
 
 
-                <div className="sidebar-bottom">
-
-                    <button className="menu-item">
-                        Settings
-                    </button>
-
+                <div className="hr-sidebar-bottom">
 
                     <button
-                        className="logout-button"
-                        onClick={handleLogout}
+                        type="button"
+                        className="hr-logout-button"
+                        onClick={onLogout}
                     >
-                        Logout
+                        <LogOut
+                            size={19}
+                            strokeWidth={2}
+                        />
+
+                        <span>Logout</span>
                     </button>
 
                 </div>
@@ -202,43 +317,46 @@ function DashboardPage({ onNotify }) {
 
 
             {/* Main Content */}
-            <main className="dashboard-content">
 
-                {/* Top Bar */}
-                <header className="dashboard-header">
+            <main className="hr-main">
+
+                {/* Header */}
+
+                <header className="hr-header">
 
                     <div>
 
+                        <p className="hr-page-label">
+                            WORKSPHERE
+                        </p>
+
                         <h1>
-                            Dashboard
+                            Employee Dashboard
                         </h1>
 
-                        <p>
-                            Welcome back to your workspace
+                        <p className="hr-header-subtitle">
+                            Manage your work and employee information
                         </p>
 
                     </div>
 
 
-                    <div className="user-info">
+                    <div className="hr-user">
 
-                        <div className="user-avatar">
-
+                        <div className="hr-user-avatar">
                             {email
                                 ? email.charAt(0).toUpperCase()
                                 : "U"}
-
                         </div>
 
-
-                        <div>
+                        <div className="hr-user-details">
 
                             <strong>
-                                {email}
+                                {email || "Employee"}
                             </strong>
 
                             <span>
-                                {role}
+                                EMPLOYEE
                             </span>
 
                         </div>
@@ -248,110 +366,127 @@ function DashboardPage({ onNotify }) {
                 </header>
 
 
-                {/* Welcome Section */}
-                <section className="welcome-section">
+                {/* Statistics */}
 
-                    <h2>
-                        Good to see you 👋
-                    </h2>
+                <section className="hr-stat-grid">
 
-                    <p>
-                        Here's what's happening with your work today.
-                    </p>
+                    <button
+                        type="button"
+                        className="hr-stat-card hr-stat-clickable"
+                        onClick={() =>
+                            handleNavigation("attendance")
+                        }
+                    >
 
-                </section>
-
-
-                {/* Dashboard Cards */}
-                <section className="dashboard-cards">
-
-
-                    {/* Attendance */}
-                    <div className="dashboard-card">
-
-                        <div className="card-icon">
-                            ✓
+                        <div className="hr-stat-icon attendance">
+                            <ClipboardCheck size={21} />
                         </div>
 
-                        <div>
+                        <div className="hr-stat-content">
 
                             <span>
                                 Attendance
                             </span>
 
-                            <h3>
+                            <strong>
                                 {loading
-                                    ? "Loading..."
+                                    ? "..."
                                     : attendanceStatus}
-                            </h3>
+                            </strong>
 
                         </div>
 
-                    </div>
+                        <ChevronRight
+                            className="hr-stat-arrow"
+                            size={19}
+                        />
+
+                    </button>
 
 
-                    {/* Leave */}
-                    <div className="dashboard-card">
+                    <button
+                        type="button"
+                        className="hr-stat-card hr-stat-clickable"
+                        onClick={() =>
+                            handleNavigation("leave")
+                        }
+                    >
 
-                        <div className="card-icon">
-                            🏖
+                        <div className="hr-stat-icon leaves">
+                            <FileText size={21} />
                         </div>
 
-                        <div>
+                        <div className="hr-stat-content">
 
                             <span>
                                 Leave Balance
                             </span>
 
-                            <h3>
-                                12 Days
-                            </h3>
+                            <strong>
+                                {loading
+                                    ? "..."
+                                    : `${totalRemainingLeaves} Days`}
+                            </strong>
 
                         </div>
 
-                    </div>
+                        <ChevronRight
+                            className="hr-stat-arrow"
+                            size={19}
+                        />
+
+                    </button>
 
 
-                    {/* Salary */}
-                    <div className="dashboard-card">
+                    <button
+                        type="button"
+                        className="hr-stat-card hr-stat-clickable"
+                        onClick={() =>
+                            handleNavigation("payroll")
+                        }
+                    >
 
-                        <div className="card-icon">
-                            ₹
+                        <div className="hr-stat-icon employees">
+                            <WalletCards size={21} />
                         </div>
 
-                        <div>
+                        <div className="hr-stat-content">
 
                             <span>
                                 Latest Salary
                             </span>
 
-                            <h3>
+                            <strong>
                                 {loading
-                                    ? "Loading..."
+                                    ? "..."
                                     : latestSalary}
-                            </h3>
+                            </strong>
 
                         </div>
 
-                    </div>
+                        <ChevronRight
+                            className="hr-stat-arrow"
+                            size={19}
+                        />
+
+                    </button>
 
 
-                    {/* Working Days */}
-                    <div className="dashboard-card">
+                    <div className="hr-stat-card">
 
-                        <div className="card-icon">
-                            📅
+                        <div className="hr-stat-icon present">
+                            <CheckCircle2 size={21} />
                         </div>
 
-                        <div>
+                        <div className="hr-stat-content">
 
                             <span>
                                 Working Days
                             </span>
 
-                            <h3>
-                                {attendance.length} Days
-                            </h3>
+                            <strong>
+                                {attendance.length}
+                            </strong>
 
                         </div>
 
@@ -360,43 +495,243 @@ function DashboardPage({ onNotify }) {
                 </section>
 
 
-                {/* Bottom Section */}
-                <section className="dashboard-grid">
+                {/* Employee Operations */}
+
+                <section className="hr-section">
+
+                    <div className="hr-section-heading">
+
+                        <div>
+
+                            <h2>
+                                Employee Operations
+                            </h2>
+
+                            <p>
+                                Quick access to your daily work information
+                            </p>
+
+                        </div>
+
+                    </div>
 
 
-                    {/* Recent Activity */}
-                    <div className="dashboard-panel">
+                    <div className="hr-operation-grid">
 
-                        <div className="panel-header">
+                        <button
+                            type="button"
+                            className="hr-operation-card"
+                            onClick={() =>
+                                handleNavigation("attendance")
+                            }
+                        >
+
+                            <div className="hr-operation-icon">
+                                <ClipboardCheck size={23} />
+                            </div>
+
+                            <div className="hr-operation-content">
+
+                                <h3>
+                                    Attendance
+                                </h3>
+
+                                <p>
+                                    Mark attendance and view your attendance history
+                                </p>
+
+                            </div>
+
+                            <ChevronRight
+                                size={19}
+                                className="hr-operation-arrow"
+                            />
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            className="hr-operation-card"
+                            onClick={() =>
+                                handleNavigation("leave")
+                            }
+                        >
+
+                            <div className="hr-operation-icon">
+                                <FileText size={23} />
+                            </div>
+
+                            <div className="hr-operation-content">
+
+                                <h3>
+                                    Leave Management
+                                </h3>
+
+                                <p>
+                                    Apply for leave and check your leave balance
+                                </p>
+
+                            </div>
+
+                            <ChevronRight
+                                size={19}
+                                className="hr-operation-arrow"
+                            />
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            className="hr-operation-card"
+                            onClick={() =>
+                                handleNavigation("payroll")
+                            }
+                        >
+
+                            <div className="hr-operation-icon">
+                                <WalletCards size={23} />
+                            </div>
+
+                            <div className="hr-operation-content">
+
+                                <h3>
+                                    Payroll
+                                </h3>
+
+                                <p>
+                                    View your salary and payroll details
+                                </p>
+
+                            </div>
+
+                            <ChevronRight
+                                size={19}
+                                className="hr-operation-arrow"
+                            />
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            className="hr-operation-card"
+                        >
+
+                            <div className="hr-operation-icon">
+                                <UserCircle size={23} />
+                            </div>
+
+                            <div className="hr-operation-content">
+
+                                <h3>
+                                    Profile
+                                </h3>
+
+                                <p>
+                                    View your employee information
+                                </p>
+
+                            </div>
+
+                            <ChevronRight
+                                size={19}
+                                className="hr-operation-arrow"
+                            />
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                {/* Recent Activity */}
+
+                <section className="hr-section">
+
+                    <div className="hr-section-heading">
+
+                        <div>
 
                             <h2>
                                 Recent Activity
                             </h2>
 
-                            <button>
-                                View All
-                            </button>
+                            <p>
+                                Your latest work activity
+                            </p>
 
                         </div>
 
+                        <button
+                            type="button"
+                            className="hr-view-all"
+                            onClick={() =>
+                                handleNavigation("attendance")
+                            }
+                        >
+                            View attendance
 
-                        {latestAttendance && (
+                            <ChevronRight size={17} />
 
-                            <div className="activity-item">
+                        </button>
 
-                                <span className="activity-dot success"></span>
+                    </div>
 
-                                <div>
+
+                    <div className="hr-activity-card">
+
+                        {latestAttendance ? (
+
+                            <div className="hr-activity-item">
+
+                                <div className="hr-activity-icon">
+
+                                    {latestAttendance.status ===
+                                        "PRESENT" ? (
+                                        <CheckCircle2 size={18} />
+                                    ) : (
+                                        <Clock3 size={18} />
+                                    )}
+
+                                </div>
+
+
+                                <div className="hr-activity-info">
 
                                     <strong>
                                         Attendance marked
                                     </strong>
 
-                                    <p>
+                                    <span>
                                         {latestAttendance.date}
-                                    </p>
+                                        {" • "}
+                                        {latestAttendance.status}
+                                    </span>
 
                                 </div>
+
+
+                                <span
+                                    className={`hr-status ${latestAttendance.status?.toLowerCase()
+                                        }`}
+                                >
+                                    {latestAttendance.status}
+                                </span>
+
+                            </div>
+
+                        ) : (
+
+                            <div className="hr-empty-state">
+
+                                <Clock3 size={22} />
+
+                                <span>
+                                    No attendance activity found.
+                                </span>
 
                             </div>
 
@@ -405,76 +740,90 @@ function DashboardPage({ onNotify }) {
 
                         {payroll && (
 
-                            <div className="activity-item">
+                            <div className="hr-activity-item">
 
-                                <span className="activity-dot"></span>
+                                <div className="hr-activity-icon">
+                                    <WalletCards size={18} />
+                                </div>
 
-                                <div>
+                                <div className="hr-activity-info">
 
                                     <strong>
-                                        Payroll generated
+                                        Payroll available
                                     </strong>
 
-                                    <p>
-                                        {payroll.month}/{payroll.year}
-                                    </p>
+                                    <span>
+                                        {payroll.month}
+                                        /
+                                        {payroll.year}
+                                    </span>
 
                                 </div>
+
+                                <span className="hr-status approved">
+                                    AVAILABLE
+                                </span>
 
                             </div>
 
                         )}
 
-
-                        <div className="activity-item">
-
-                            <span className="activity-dot"></span>
-
-                            <div>
-
-                                <strong>
-                                    Leave balance updated
-                                </strong>
-
-                                <p>
-                                    Available in Leave section
-                                </p>
-
-                            </div>
-
-                        </div>
-
                     </div>
 
+                </section>
 
-                    {/* AI Assistant */}
-                    <div className="dashboard-panel ai-panel">
 
-                        <div className="panel-header">
+                {/* AI Assistant */}
+
+                <section className="hr-section">
+
+                    <div className="hr-section-heading">
+
+                        <div>
 
                             <h2>
-                                AI Assistant
+                                WorkSphere Assistant
                             </h2>
 
-                            <span className="ai-badge">
-                                AI
-                            </span>
+                            <p>
+                                Get help with your employee information
+                            </p>
 
                         </div>
 
-
-                        <p>
-                            Ask WorkSphere about your attendance,
-                            leaves, salary or HR information.
-                        </p>
-
-
-                        <button className="ai-button">
-                            Ask AI Assistant
-                        </button>
-
                     </div>
 
+
+                    <button
+                        type="button"
+                        className="hr-operation-card ai-operation-card"
+                    >
+
+                        <div className="hr-operation-icon">
+
+                            <Sparkles size={23} />
+
+                        </div>
+
+                        <div className="hr-operation-content">
+
+                            <h3>
+                                AI HR Assistant
+                            </h3>
+
+                            <p>
+                                Ask about your leave balance, attendance,
+                                salary or HR information.
+                            </p>
+
+                        </div>
+
+                        <ChevronRight
+                            size={19}
+                            className="hr-operation-arrow"
+                        />
+
+                    </button>
 
                 </section>
 
@@ -485,3 +834,4 @@ function DashboardPage({ onNotify }) {
 }
 
 export default DashboardPage;
+

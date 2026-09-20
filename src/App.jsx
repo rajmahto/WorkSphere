@@ -1,6 +1,8 @@
 import { useState } from "react";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import HRDashboardPage from "./pages/HRDashboardPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 import Notification from "./components/Notification";
 
 function App() {
@@ -11,10 +13,10 @@ function App() {
 
   const [notification, setNotification] = useState(null);
 
+  const role = localStorage.getItem("role");
+
   const handleLogin = (loginNotification) => {
-
     setNotification(loginNotification);
-
     setLoggedIn(true);
   };
 
@@ -23,6 +25,8 @@ function App() {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("email");
+    localStorage.removeItem("currentPage");
+    localStorage.removeItem("currentHRPage");
 
     setLoggedIn(false);
 
@@ -42,13 +46,23 @@ function App() {
         />
       )}
 
-      {loggedIn ? (
-        <DashboardPage
+      {!loggedIn ? (
+        <LoginPage onLogin={handleLogin} />
+      ) : role === "HR" ? (
+        <HRDashboardPage
+          onLogout={handleLogout}
+          onNotify={setNotification}
+        />
+      ) : role === "ADMIN" ? (
+        <AdminDashboardPage
           onLogout={handleLogout}
           onNotify={setNotification}
         />
       ) : (
-        <LoginPage onLogin={handleLogin} />
+        <DashboardPage
+          onLogout={handleLogout}
+          onNotify={setNotification}
+        />
       )}
     </>
   );

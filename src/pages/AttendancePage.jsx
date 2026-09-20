@@ -1,4 +1,15 @@
 import { useEffect, useState } from "react";
+import {
+    ArrowLeft,
+    CalendarCheck,
+    Clock3,
+    LogIn,
+    LogOut,
+    Timer,
+    CheckCircle2,
+    Circle
+} from "lucide-react";
+
 import "../App.css";
 
 function AttendancePage({ onNotify, onBack }) {
@@ -29,19 +40,22 @@ function AttendancePage({ onNotify, onBack }) {
                 }
             );
 
-
             if (!response.ok) {
                 throw new Error("Unable to fetch attendance");
             }
 
-
             const data = await response.json();
 
-            setAttendance(data);
+            setAttendance(
+                Array.isArray(data) ? data : []
+            );
 
         } catch (error) {
 
-            console.error("Attendance error:", error);
+            console.error(
+                "Attendance error:",
+                error
+            );
 
             onNotify({
                 type: "error",
@@ -62,7 +76,9 @@ function AttendancePage({ onNotify, onBack }) {
 
     const todayAttendance =
         attendance
-            .filter(record => record.date === today)
+            .filter(
+                record => record.date === today
+            )
             .sort(
                 (a, b) =>
                     new Date(b.checkIn || 0) -
@@ -72,15 +88,20 @@ function AttendancePage({ onNotify, onBack }) {
 
     const formatTime = (dateTime) => {
 
-        if (!dateTime) return "--";
+        if (!dateTime) {
+            return "--";
+        }
 
         const date = new Date(dateTime);
 
-        return date.toLocaleTimeString("en-IN", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true
-        });
+        return date.toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true
+            }
+        );
     };
 
 
@@ -123,9 +144,7 @@ function AttendancePage({ onNotify, onBack }) {
                 }
             );
 
-
             const data = await response.json();
-
 
             if (!response.ok) {
 
@@ -139,16 +158,13 @@ function AttendancePage({ onNotify, onBack }) {
                 return;
             }
 
-
             await fetchAttendance();
-
 
             onNotify({
                 type: "success",
                 message:
                     "Your attendance has been marked successfully."
             });
-
 
         } catch (error) {
 
@@ -159,8 +175,7 @@ function AttendancePage({ onNotify, onBack }) {
 
             onNotify({
                 type: "error",
-                message:
-                    "Unable to connect to server."
+                message: "Unable to connect to server."
             });
 
         } finally {
@@ -188,9 +203,7 @@ function AttendancePage({ onNotify, onBack }) {
                 }
             );
 
-
             const data = await response.json();
-
 
             if (!response.ok) {
 
@@ -204,16 +217,13 @@ function AttendancePage({ onNotify, onBack }) {
                 return;
             }
 
-
             await fetchAttendance();
-
 
             onNotify({
                 type: "success",
                 message:
                     "You have checked out successfully."
             });
-
 
         } catch (error) {
 
@@ -224,8 +234,7 @@ function AttendancePage({ onNotify, onBack }) {
 
             onNotify({
                 type: "error",
-                message:
-                    "Unable to connect to server."
+                message: "Unable to connect to server."
             });
 
         } finally {
@@ -241,9 +250,11 @@ function AttendancePage({ onNotify, onBack }) {
 
             return (
                 <button
-                    className="mark-attendance-button"
+                    type="button"
+                    className="attendance-primary-button"
                     disabled
                 >
+                    <Clock3 size={18} />
                     Loading...
                 </button>
             );
@@ -254,13 +265,16 @@ function AttendancePage({ onNotify, onBack }) {
 
             return (
                 <button
-                    className="mark-attendance-button"
+                    type="button"
+                    className="attendance-primary-button"
                     onClick={handleMarkAttendance}
                     disabled={marking}
                 >
+                    <CalendarCheck size={18} />
+
                     {marking
                         ? "Marking..."
-                        : "+ Mark Attendance"}
+                        : "Mark Attendance"}
                 </button>
             );
         }
@@ -273,10 +287,13 @@ function AttendancePage({ onNotify, onBack }) {
 
             return (
                 <button
-                    className="mark-attendance-button"
+                    type="button"
+                    className="attendance-primary-button"
                     onClick={handleCheckOut}
                     disabled={checkingOut}
                 >
+                    <LogOut size={18} />
+
                     {checkingOut
                         ? "Checking Out..."
                         : "Check Out"}
@@ -287,9 +304,11 @@ function AttendancePage({ onNotify, onBack }) {
 
         return (
             <button
-                className="mark-attendance-button"
+                type="button"
+                className="attendance-primary-button completed"
                 disabled
             >
+                <CheckCircle2 size={18} />
                 Attendance Completed
             </button>
         );
@@ -297,63 +316,82 @@ function AttendancePage({ onNotify, onBack }) {
 
 
     return (
+
         <div className="attendance-page">
+
+            {/* Header */}
 
             <div className="attendance-header">
 
                 <div>
 
                     <button
+                        type="button"
                         className="back-dashboard-button"
                         onClick={onBack}
                     >
-                        ← Back to Dashboard
+                        <ArrowLeft size={17} />
+                        Back to Dashboard
                     </button>
 
+                    <div className="attendance-title-row">
 
-                    <h1>
-                        Attendance
-                    </h1>
+                        <div className="attendance-title-icon">
+                            <CalendarCheck size={24} />
+                        </div>
 
+                        <div>
 
-                    <p>
-                        Track your attendance and working hours
-                    </p>
+                            <h1>
+                                Attendance
+                            </h1>
+
+                            <p>
+                                Track your attendance and working hours
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                {renderAttendanceButton()}
+                <div className="attendance-header-action">
+                    {renderAttendanceButton()}
+                </div>
 
             </div>
 
 
-            <div className="attendance-summary">
+            {/* Today's Summary */}
 
+            <section className="attendance-summary">
 
-                {/* Today's Status */}
+                {/* Status */}
+
                 <div className="attendance-status-card">
 
-                    <div className="attendance-icon">
-                        ✓
+                    <div className="attendance-summary-icon status">
+                        {todayAttendance ? (
+                            <CheckCircle2 size={22} />
+                        ) : (
+                            <Circle size={22} />
+                        )}
                     </div>
 
-
-                    <div>
+                    <div className="attendance-summary-content">
 
                         <span>
                             Today's Status
                         </span>
 
-
-                        <h2>
-
+                        <strong>
                             {loading
                                 ? "Loading..."
                                 : todayAttendance?.status ||
                                 "NOT MARKED"}
-
-                        </h2>
+                        </strong>
 
                     </div>
 
@@ -361,27 +399,24 @@ function AttendancePage({ onNotify, onBack }) {
 
 
                 {/* Check In */}
+
                 <div className="attendance-time-card">
 
-                    <div className="time-icon">
-                        🕘
+                    <div className="attendance-summary-icon check-in">
+                        <LogIn size={21} />
                     </div>
 
-
-                    <div>
+                    <div className="attendance-summary-content">
 
                         <span>
                             Check In
                         </span>
 
-
-                        <h2>
-
+                        <strong>
                             {formatTime(
                                 todayAttendance?.checkIn
                             )}
-
-                        </h2>
+                        </strong>
 
                     </div>
 
@@ -389,27 +424,24 @@ function AttendancePage({ onNotify, onBack }) {
 
 
                 {/* Check Out */}
+
                 <div className="attendance-time-card">
 
-                    <div className="time-icon">
-                        🕘
+                    <div className="attendance-summary-icon check-out">
+                        <LogOut size={21} />
                     </div>
 
-
-                    <div>
+                    <div className="attendance-summary-content">
 
                         <span>
                             Check Out
                         </span>
 
-
-                        <h2>
-
+                        <strong>
                             {formatTime(
                                 todayAttendance?.checkOut
                             )}
-
-                        </h2>
+                        </strong>
 
                     </div>
 
@@ -417,39 +449,35 @@ function AttendancePage({ onNotify, onBack }) {
 
 
                 {/* Working Hours */}
+
                 <div className="attendance-time-card">
 
-                    <div className="time-icon">
-                        ⏱️
+                    <div className="attendance-summary-icon working-hours">
+                        <Timer size={21} />
                     </div>
 
-
-                    <div>
+                    <div className="attendance-summary-content">
 
                         <span>
                             Working Hours
                         </span>
 
-
-                        <h2>
-
+                        <strong>
                             {formatWorkingHours(
                                 todayAttendance?.workingMinutes
                             )}
-
-                        </h2>
+                        </strong>
 
                     </div>
 
                 </div>
 
-
-            </div>
+            </section>
 
 
             {/* Attendance History */}
-            <div className="attendance-history">
 
+            <section className="attendance-history">
 
                 <div className="attendance-history-header">
 
@@ -459,11 +487,14 @@ function AttendancePage({ onNotify, onBack }) {
                             Attendance History
                         </h2>
 
-
                         <p>
                             Your recent attendance records
                         </p>
 
+                    </div>
+
+                    <div className="attendance-history-count">
+                        {attendance.length} Records
                     </div>
 
                 </div>
@@ -472,7 +503,6 @@ function AttendancePage({ onNotify, onBack }) {
                 <div className="attendance-table-container">
 
                     <table className="attendance-table">
-
 
                         <thead>
 
@@ -505,7 +535,6 @@ function AttendancePage({ onNotify, onBack }) {
 
                         <tbody>
 
-
                             {loading ? (
 
                                 <tr>
@@ -518,7 +547,6 @@ function AttendancePage({ onNotify, onBack }) {
                                     </td>
 
                                 </tr>
-
 
                             ) : attendance.length === 0 ? (
 
@@ -533,7 +561,6 @@ function AttendancePage({ onNotify, onBack }) {
 
                                 </tr>
 
-
                             ) : (
 
                                 attendance
@@ -541,40 +568,31 @@ function AttendancePage({ onNotify, onBack }) {
                                     .reverse()
                                     .map((record) => (
 
-                                        <tr key={record.id}>
-
+                                        <tr
+                                            key={record.id}
+                                        >
 
                                             <td>
                                                 {record.date}
                                             </td>
 
-
                                             <td>
-
                                                 {formatTime(
                                                     record.checkIn
                                                 )}
-
                                             </td>
 
-
                                             <td>
-
                                                 {formatTime(
                                                     record.checkOut
                                                 )}
-
                                             </td>
 
-
                                             <td>
-
                                                 {formatWorkingHours(
                                                     record.workingMinutes
                                                 )}
-
                                             </td>
-
 
                                             <td>
 
@@ -591,12 +609,10 @@ function AttendancePage({ onNotify, onBack }) {
 
                                             </td>
 
-
                                         </tr>
 
                                     ))
                             )}
-
 
                         </tbody>
 
@@ -604,11 +620,10 @@ function AttendancePage({ onNotify, onBack }) {
 
                 </div>
 
-            </div>
+            </section>
 
         </div>
     );
 }
-
 
 export default AttendancePage;
