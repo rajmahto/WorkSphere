@@ -1,21 +1,74 @@
-# Logs
-logs
-*.log
+# =========================================================
+# WorkSphere - Frontend + Backend
+# =========================================================
+
+# -------------------------
+# Node / React / Vite
+# -------------------------
+node_modules/
+dist/
+dist-ssr/
+*.local
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Environment files
+.env
+.env.*
+!.env.example
 
-# Editor directories and files
+# -------------------------
+# Java / Spring Boot / Maven
+# -------------------------
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+HELP.md
+
+# -------------------------
+# IntelliJ IDEA
+# -------------------------
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# -------------------------
+# VS Code
+# -------------------------
 .vscode/*
 !.vscode/extensions.json
-.idea
+
+# -------------------------
+# Eclipse / STS
+# -------------------------
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.apt_generated
+
+# -------------------------
+# NetBeans
+# -------------------------
+/nbproject/private/
+/nbbuild/
+/nbdist/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# -------------------------
+# OS / IDE files
+# -------------------------
 .DS_Store
 *.suo
 *.ntvs*
