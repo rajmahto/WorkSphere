@@ -4,6 +4,7 @@ import com.worksphere.worksphere.dto.LoginRequest;
 import com.worksphere.worksphere.dto.LoginResponse;
 import com.worksphere.worksphere.entity.User;
 import com.worksphere.worksphere.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public User createUser(@RequestBody User user) {
         return userService.saveUser(user);

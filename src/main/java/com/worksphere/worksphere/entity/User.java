@@ -1,5 +1,5 @@
 package com.worksphere.worksphere.entity;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,7 +10,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @JsonIgnore
     private String password;
     private String role;
 

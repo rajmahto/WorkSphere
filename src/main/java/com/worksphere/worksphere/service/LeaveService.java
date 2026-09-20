@@ -14,11 +14,18 @@ public class LeaveService {
     private final LeaveRepository leaveRepository;
     private final LeaveBalanceService leaveBalanceService;
 
-    public LeaveService(LeaveRepository leaveRepository,
-                        LeaveBalanceService leaveBalanceService) {
+    public LeaveService(
+            LeaveRepository leaveRepository,
+            LeaveBalanceService leaveBalanceService) {
+
         this.leaveRepository = leaveRepository;
         this.leaveBalanceService = leaveBalanceService;
     }
+
+
+    // =========================
+    // EMPLOYEE
+    // =========================
 
     public Leave applyLeave(Leave leave) {
 
@@ -27,32 +34,60 @@ public class LeaveService {
         return leaveRepository.save(leave);
     }
 
+
+    public List<Leave> getLeavesByEmployeeId(Long employeeId) {
+
+        return leaveRepository.findByEmployeeId(employeeId);
+    }
+
+
+    // =========================
+    // HR / ADMIN
+    // =========================
+
     public List<Leave> getAllLeaves() {
+
         return leaveRepository.findAll();
     }
 
+
     public List<Leave> getPendingLeaves() {
+
         return leaveRepository.findByStatus("PENDING");
     }
 
+
     public Leave getLeaveById(Long id) {
-        return leaveRepository.findById(id).orElse(null);
+
+        return leaveRepository
+                .findById(id)
+                .orElse(null);
     }
 
+
     public void deleteLeave(Long id) {
+
         leaveRepository.deleteById(id);
     }
+
+
+    // =========================
+    // APPROVE LEAVE
+    // =========================
 
     @Transactional
     public Leave approveLeave(Long id) {
 
-        Leave leave = leaveRepository.findById(id).orElse(null);
+        Leave leave = leaveRepository
+                .findById(id)
+                .orElse(null);
 
         if (leave == null) {
             return null;
         }
 
         if (!"PENDING".equals(leave.getStatus())) {
+
             throw new RuntimeException(
                     "Only pending leave can be approved"
             );
@@ -74,15 +109,23 @@ public class LeaveService {
         return leaveRepository.save(leave);
     }
 
+
+    // =========================
+    // REJECT LEAVE
+    // =========================
+
     public Leave rejectLeave(Long id) {
 
-        Leave leave = leaveRepository.findById(id).orElse(null);
+        Leave leave = leaveRepository
+                .findById(id)
+                .orElse(null);
 
         if (leave == null) {
             return null;
         }
 
         if (!"PENDING".equals(leave.getStatus())) {
+
             throw new RuntimeException(
                     "Only pending leave can be rejected"
             );
@@ -91,8 +134,5 @@ public class LeaveService {
         leave.setStatus("REJECTED");
 
         return leaveRepository.save(leave);
-    }
-    public List<Leave> getLeavesByEmployeeId(Long employeeId) {
-        return leaveRepository.findByEmployeeId(employeeId);
     }
 }

@@ -24,10 +24,16 @@ public class UserService {
 
     public User saveUser(User user) {
 
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already registered");
+        }
+
         String encodedPassword =
                 passwordEncoder.encode(user.getPassword());
 
         user.setPassword(encodedPassword);
+
+        user.setRole("EMPLOYEE");
 
         return userRepository.save(user);
     }

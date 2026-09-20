@@ -25,7 +25,10 @@ public class LeaveBalanceController {
         this.employeeRepository = employeeRepository;
     }
 
-    // HR and ADMIN can create leave balances
+    // =========================
+    // HR / ADMIN
+    // =========================
+
     @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
     @PostMapping
     public LeaveBalance createLeaveBalance(
@@ -34,7 +37,6 @@ public class LeaveBalanceController {
         return leaveBalanceService.createLeaveBalance(leaveBalance);
     }
 
-    // HR and ADMIN can see all leave balances
     @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
     @GetMapping
     public List<LeaveBalance> getAllLeaveBalances() {
@@ -42,7 +44,26 @@ public class LeaveBalanceController {
         return leaveBalanceService.getAllLeaveBalances();
     }
 
-    // Employee can see only their own leave balances
+    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
+    @GetMapping("/{id}")
+    public LeaveBalance getLeaveBalanceById(
+            @PathVariable Long id) {
+
+        return leaveBalanceService.getLeaveBalanceById(id);
+    }
+
+    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
+    @DeleteMapping("/{id}")
+    public void deleteLeaveBalance(
+            @PathVariable Long id) {
+
+        leaveBalanceService.deleteLeaveBalance(id);
+    }
+
+    // =========================
+    // EMPLOYEE
+    // =========================
+
     @PreAuthorize("hasRole('EMPLOYEE')")
     @GetMapping("/my")
     public List<LeaveBalance> getMyLeaveBalances(
@@ -60,22 +81,5 @@ public class LeaveBalanceController {
 
         return leaveBalanceService
                 .getLeaveBalancesByEmployeeId(employee.getId());
-    }
-
-    // HR and ADMIN can see a specific leave balance
-    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
-    @GetMapping("/{id}")
-    public LeaveBalance getLeaveBalanceById(
-            @PathVariable Long id) {
-
-        return leaveBalanceService.getLeaveBalanceById(id);
-    }
-
-    // HR and ADMIN can delete leave balance
-    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
-    @DeleteMapping("/{id}")
-    public void deleteLeaveBalance(@PathVariable Long id) {
-
-        leaveBalanceService.deleteLeaveBalance(id);
     }
 }
