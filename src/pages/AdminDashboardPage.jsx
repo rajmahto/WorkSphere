@@ -18,7 +18,8 @@ import {
     UserPlus,
     ClipboardList,
     Activity,
-    Database
+    Database,
+    Building2
 } from "lucide-react";
 
 
@@ -28,6 +29,7 @@ import "../App.css";
 import AdminAttendancePage from "./AdminAttendancePage";
 import AdminPayrollPage from "./AdminPayrollPage";
 import AdminSettingsPage from "./AdminSettingsPage";
+import AdminDepartmentPage from "./AdminDepartmentPage";
 
 
 function AdminDashboardPage({ onLogout, onNotify }) {
@@ -215,9 +217,17 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
         return (
             <EmployeeManagementPage
-                onBack={() =>
-                    navigate("dashboard")
-                }
+                onBack={() => navigate("dashboard")}
+                onNotify={onNotify}
+            />
+        );
+    }
+
+    if (currentPage === "departments") {
+        return (
+            <AdminDepartmentPage
+                onBack={() => setCurrentPage("dashboard")}
+                onNotify={onNotify}
             />
         );
     }
@@ -226,6 +236,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
         return (
             <AdminAttendancePage
                 onBack={() => setCurrentPage("dashboard")}
+                
             />
         );
     }
@@ -234,6 +245,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
         return (
             <AdminPayrollPage
                 onBack={() => setCurrentPage("dashboard")}
+                onNotify={onNotify}
             />
         );
     }
@@ -327,6 +339,22 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
                         <span className="hr-nav-badge">
                             {employees.length}
+                        </span>
+                    </button>
+
+                    <button
+                        className={`hr-nav-item ${currentPage === "departments"
+                            ? "active"
+                            : ""
+                            }`}
+                        onClick={() =>
+                            navigate("departments")
+                        }
+                    >
+                        <Building2 size={19} />
+
+                        <span>
+                            Departments
                         </span>
                     </button>
 

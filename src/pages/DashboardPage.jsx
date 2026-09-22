@@ -15,6 +15,7 @@ import {
 import AttendancePage from "./AttendancePage";
 import LeavePage from "./LeavePage";
 import PayrollPage from "./PayrollPage";
+import EmployeeProfilePage from "./EmployeeProfilePage";
 import "../App.css";
 
 function DashboardPage({ onLogout, onNotify }) {
@@ -188,6 +189,14 @@ function DashboardPage({ onLogout, onNotify }) {
         );
     }
 
+    if (currentPage === "profile") {
+        return (
+            <EmployeeProfilePage
+                onBack={() => setCurrentPage("dashboard")}
+            />
+        );
+    }
+
     return (
 
         <div className="hr-dashboard-container">
@@ -283,7 +292,9 @@ function DashboardPage({ onLogout, onNotify }) {
 
                     <button
                         type="button"
-                        className="hr-nav-item"
+                        className={`hr-nav-item ${currentPage === "profile" ? "active" : ""
+                            }`}
+                        onClick={() => handleNavigation("profile")}
                     >
                         <UserCircle
                             size={19}
@@ -617,6 +628,7 @@ function DashboardPage({ onLogout, onNotify }) {
                         <button
                             type="button"
                             className="hr-operation-card"
+                            onClick={() => handleNavigation("profile")}
                         >
 
                             <div className="hr-operation-icon">

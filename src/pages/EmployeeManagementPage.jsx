@@ -10,22 +10,43 @@ import {
     CalendarDays,
     IndianRupee,
     LoaderCircle,
-    UsersRound
+    UsersRound,
+    UserPlus,
+    Pencil,
+    Trash2,
 } from "lucide-react";
 
 import "../App.css";
 
 
-function EmployeeManagementPage({ onBack }) {
+function EmployeeManagementPage({ onBack, onNotify }) {
 
     const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
 
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showForm, setShowForm] = useState(false);
+    const [showAddForm, setShowAddForm] = useState(false);
+    const [showEditForm, setShowEditForm] = useState(false);
+    const [editingEmployee, setEditingEmployee] = useState(null);
+    const [employeeForm, setEmployeeForm] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        designation: "",
+        departmentId: "",
+        joiningDate: "",
+        salary: ""
+    });
+    const [departments, setDepartments] = useState([]);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
 
 
     useEffect(() => {
         fetchEmployees();
+        fetchDepartments();
     }, []);
 
 
@@ -74,7 +95,172 @@ function EmployeeManagementPage({ onBack }) {
         }
     };
 
+    const fetchDepartments = async () => {
+        try {
+            const response = await fetch(
+                "http://localhost:8080/departments",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
 
+            if (!response.ok) {
+                throw new Error("Failed to fetch departments");
+            }
+
+            const data = await response.json();
+            setDepartments(data);
+        } catch (error) {
+            console.error("Error fetching departments:", error);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+
+        setEmployeeForm({
+            ...employeeForm,
+            [name]: value
+        });
+    };
+
+    const handleAddEmployee = async () => {
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:8080/employees",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: employeeForm.name,
+                        email: employeeForm.email,
+                        phone: employeeForm.phone,
+                        designation: employeeForm.designation,
+                        departmentId: Number(employeeForm.departmentId),
+                        joiningDate: employeeForm.joiningDate,
+                        salary: Number(employeeForm.salary)
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(
+                    errorData.message || "Unable to add employee"
+                );
+            }
+
+            await fetchEmployees();
+
+            setEmployeeForm({
+                name: "",
+                email: "",
+                phone: "",
+                designation: "",
+                departmentId: "",
+                joiningDate: "",
+                salary: ""
+            });
+
+            setShowAddForm(false);
+
+            onNotify({
+                type: "success",
+                message: "Employee added successfully!"
+            });
+
+        } catch (error) {
+
+            console.error("Add employee error:", error);
+
+            alert(error.message);
+        }
+    };
+
+    const handleUpdateEmployee = async () => {
+        try {
+            const response = await fetch(
+                `http://localhost:8080/employees/${editingEmployee.id}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: editingEmployee.name,
+                        email: editingEmployee.email,
+                        phone: editingEmployee.phone,
+                        designation: editingEmployee.designation,
+                        departmentId: editingEmployee.department?.id,
+                        joiningDate: editingEmployee.joiningDate,
+                        salary: Number(editingEmployee.salary)
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Failed to update employee");
+            }
+
+            await fetchEmployees();
+
+            setShowEditForm(false);
+            setEditingEmployee(null);
+
+            onNotify({
+                type: "success",
+                message: "Employee updated successfully!"
+            });
+
+        } catch (error) {
+            alert(error.message);
+        }
+    };
+
+
+    const handleDeleteEmployee = async (employeeId, employeeName) => {
+        try {
+            const response = await fetch(
+                `http://localhost:8080/employees/${employeeId}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                const errorData = await response.json();
+
+                throw new Error(
+                    errorData.message || "Failed to delete employee"
+                );
+            }
+
+            await fetchEmployees();
+
+            onNotify({
+                type: "success",
+                message: `${employeeName} deleted successfully!`
+            });
+
+        } catch (error) {
+            onNotify({
+                type: "error",
+                message: error.message
+            });
+        }
+    };
     const formatDate = (date) => {
 
         if (!date) return "—";
@@ -172,8 +358,297 @@ function EmployeeManagementPage({ onBack }) {
 
                 </div>
 
+                <button
+                    className="add-employee-button"
+                    onClick={() => setShowAddForm(true)}
+                >
+                    <UserPlus size={18} />
+                    Add Employee
+                </button>
+
             </div>
 
+            {showAddForm && (
+                <div className="add-employee-form-card">
+
+                    <div className="add-employee-form-header">
+                        <div>
+                            <h2>Add Employee</h2>
+                            <p>Enter employee information</p>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() => setShowAddForm(false)}
+                            className="add-employee-close"
+                        >
+                            ×
+                        </button>
+                    </div>
+
+                    <div className="add-employee-form-grid">
+
+                        <div className="form-group">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Enter employee name"
+                                value={employeeForm.name}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Enter employee email"
+                                value={employeeForm.email}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Phone</label>
+                            <input
+                                type="text"
+                                name="phone"
+                                placeholder="Enter phone number"
+                                value={employeeForm.phone}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Designation</label>
+                            <input
+                                type="text"
+                                name="designation"
+                                placeholder="Enter designation"
+                                value={employeeForm.designation}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Department</label>
+
+                            <select
+                                name="departmentId"
+                                value={employeeForm.departmentId}
+                                onChange={handleInputChange}
+                            >
+                                <option value="">Select Department</option>
+
+                                {departments.map((department) => (
+                                    <option key={department.id} value={department.id}>
+                                        {department.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Joining Date</label>
+                            <input
+                                type="date"
+                                name="joiningDate"
+                                value={employeeForm.joiningDate}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Salary</label>
+                            <input
+                                type="number"
+                                name="salary"
+                                placeholder="Enter salary"
+                                value={employeeForm.salary}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+
+                    </div>
+
+                    <div className="add-employee-form-actions">
+                        <button
+                            type="button"
+                            className="cancel-employee-button"
+                            onClick={() => setShowAddForm(false)}
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="button"
+                            className="save-employee-button"
+                            onClick={handleAddEmployee}
+                        >
+                            Add Employee
+                        </button>
+                    </div>
+
+                </div>
+            )}
+
+            {showEditForm && editingEmployee && (
+                <div className="add-employee-form-card">
+                    <div className="add-employee-form-header">
+                        <div>
+                            <h2>Edit Employee</h2>
+                            <p>Update employee information</p>
+                        </div>
+
+                        <button
+                            type="button"
+                            className="add-employee-close"
+                            onClick={() => {
+                                setShowEditForm(false);
+                                setEditingEmployee(null);
+                            }}
+                        >
+                            ×
+                        </button>
+                    </div>
+
+                    <div className="add-employee-form-grid">
+
+                        <div className="form-group">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                value={editingEmployee.name || ""}
+                                onChange={(e) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        name: e.target.value
+                                    })
+                                }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                value={editingEmployee.email || ""}
+                                onChange={(e) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        email: e.target.value
+                                    })
+                                }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Phone</label>
+                            <input
+                                type="text"
+                                value={editingEmployee.phone || ""}
+                                onChange={(e) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        phone: e.target.value
+                                    })
+                                }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Designation</label>
+                            <input
+                                type="text"
+                                value={editingEmployee.designation || ""}
+                                onChange={(e) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        designation: e.target.value
+                                    })
+                                }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Department</label>
+
+                            <select
+                                value={editingEmployee.department?.id || ""}
+                                onChange={(e) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        department: {
+                                            ...editingEmployee.department,
+                                            id: Number(e.target.value)
+                                        }
+                                    })
+                                }
+                            >
+                                <option value="">Select Department</option>
+
+                                {departments.map((department) => (
+                                    <option key={department.id} value={department.id}>
+                                        {department.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Joining Date</label>
+                            <input
+                                type="date"
+                                value={editingEmployee.joiningDate || ""}
+                                onChange={(e) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        joiningDate: e.target.value
+                                    })
+                                }
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Salary</label>
+                            <input
+                                type="number"
+                                value={editingEmployee.salary || ""}
+                                onChange={(e) =>
+                                    setEditingEmployee({
+                                        ...editingEmployee,
+                                        salary: e.target.value
+                                    })
+                                }
+                            />
+                        </div>
+
+                    </div>
+
+                    <div className="add-employee-form-actions">
+                        <button
+                            type="button"
+                            className="cancel-employee-button"
+                            onClick={() => {
+                                setShowEditForm(false);
+                                setEditingEmployee(null);
+                            }}
+                        >
+                            Cancel
+                        </button>
+
+                        <button
+                            type="button"
+                            className="save-employee-button"
+                            onClick={handleUpdateEmployee}
+                        >
+                            Update Employee
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Employee Card */}
 
@@ -234,6 +709,10 @@ function EmployeeManagementPage({ onBack }) {
                                     Salary
                                 </th>
 
+                                <th>
+                                    Actions
+                                </th>
+
                             </tr>
 
                         </thead>
@@ -246,7 +725,7 @@ function EmployeeManagementPage({ onBack }) {
                                 <tr>
 
                                     <td
-                                        colSpan="6"
+                                        colSpan="7"
                                         className="table-message"
                                     >
 
@@ -272,7 +751,7 @@ function EmployeeManagementPage({ onBack }) {
                                 <tr>
 
                                     <td
-                                        colSpan="6"
+                                        colSpan="7"
                                         className="table-message"
                                     >
 
@@ -451,6 +930,35 @@ function EmployeeManagementPage({ onBack }) {
                                                 </div>
 
                                             </td>
+                                            <td>
+                                                <div className="employee-action-buttons">
+                                                    <button
+                                                        type="button"
+                                                        className="edit-employee-button"
+                                                        onClick={() => {
+                                                            setEditingEmployee(employee);
+                                                            setShowEditForm(true);
+                                                        }}
+                                                    >
+                                                        <Pencil size={15} />
+                                                        Edit
+                                                    </button>
+
+                                                    {role === "ADMIN" && (
+                                                        <button
+                                                            type="button"
+                                                            className="delete-employee-button"
+                                                            onClick={() => {
+                                                                setSelectedEmployee(employee);
+                                                                setShowDeleteModal(true);
+                                                            }}
+                                                        >
+                                                            <Trash2 size={15} />
+                                                            Delete
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </td>
 
                                         </tr>
 
@@ -466,6 +974,68 @@ function EmployeeManagementPage({ onBack }) {
                 </div>
 
             </section>
+
+            {showDeleteModal && selectedEmployee && (
+                <div className="delete-modal-overlay">
+                    <div className="delete-modal">
+
+                        <button
+                            type="button"
+                            className="delete-modal-close"
+                            onClick={() => {
+                                setShowDeleteModal(false);
+                                setSelectedEmployee(null);
+                            }}
+                        >
+                            ×
+                        </button>
+
+                        <div className="delete-modal-icon">
+                            ⚠
+                        </div>
+
+                        <h2>Delete Employee?</h2>
+
+                        <p>
+                            Are you sure you want to delete{" "}
+                            <strong>{selectedEmployee.name}</strong>?
+                        </p>
+
+                        <div className="delete-modal-actions">
+                            <button
+                                type="button"
+                                className="delete-modal-cancel"
+                                onClick={() => {
+                                    setShowDeleteModal(false);
+                                    setSelectedEmployee(null);
+                                }}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                className="delete-modal-confirm"
+                                onClick={() => {
+                                    if (!selectedEmployee) {
+                                        return;
+                                    }
+
+                                    const employeeId = selectedEmployee.id;
+                                    const employeeName = selectedEmployee.name;
+
+                                    setShowDeleteModal(false);
+                                    setSelectedEmployee(null);
+
+                                    handleDeleteEmployee(employeeId, employeeName);
+                                }}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );

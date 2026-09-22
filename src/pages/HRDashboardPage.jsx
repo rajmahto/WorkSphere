@@ -20,6 +20,9 @@ import {
 import "../App.css";
 import HRLeavePage from "./HRLeavePage";
 import EmployeeManagementPage from "./EmployeeManagementPage";
+import AdminAttendancePage from "./AdminAttendancePage";
+import AdminPayrollPage from "./AdminPayrollPage";
+import HRProfilePage from "./HRProfilePage";
 
 
 function HRDashboardPage({ onLogout, onNotify }) {
@@ -202,6 +205,32 @@ function HRDashboardPage({ onLogout, onNotify }) {
         );
     }
 
+    if (currentPage === "attendance") {
+        return (
+            <AdminAttendancePage
+                onBack={() => navigate("dashboard")}
+                onNotify={onNotify}
+            />
+        );
+    }
+
+    if (currentPage === "payroll") {
+        return (
+            <AdminPayrollPage
+                onBack={() => navigate("dashboard")}
+                onNotify={onNotify}
+            />
+        );
+    }
+
+    if (currentPage === "profile") {
+        return (
+            <HRProfilePage
+                onBack={() => navigate("dashboard")}
+            />
+        );
+    }
+
 
     /* --------------------------------
        HR DASHBOARD
@@ -274,13 +303,9 @@ function HRDashboardPage({ onLogout, onNotify }) {
 
 
                     <button
-                        className="hr-nav-item"
+                        className={`hr-nav-item ${currentPage === "attendance" ? "active" : ""}`}
                         onClick={() =>
-                            onNotify({
-                                type: "info",
-                                message:
-                                    "Attendance management is coming next."
-                            })
+                            navigate("attendance")
                         }
                     >
                         <ClipboardCheck size={19} />
@@ -313,13 +338,7 @@ function HRDashboardPage({ onLogout, onNotify }) {
 
                     <button
                         className="hr-nav-item"
-                        onClick={() =>
-                            onNotify({
-                                type: "info",
-                                message:
-                                    "Payroll management is coming next."
-                            })
-                        }
+                        onClick={() => navigate("payroll")}
                     >
                         <WalletCards size={19} />
 
@@ -330,14 +349,8 @@ function HRDashboardPage({ onLogout, onNotify }) {
 
 
                     <button
-                        className="hr-nav-item"
-                        onClick={() =>
-                            onNotify({
-                                type: "info",
-                                message:
-                                    "Profile management is coming next."
-                            })
-                        }
+                        className={`hr-nav-item ${currentPage === "profile" ? "active" : ""}`}
+                        onClick={() => navigate("profile")}
                     >
                         <UserCircle size={19} />
 

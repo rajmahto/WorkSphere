@@ -15,6 +15,9 @@ function AdminAttendancePage({ onBack }) {
 
     const [attendance, setAttendance] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedEmployee, setSelectedEmployee] = useState("ALL");
+    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState("ALL");
 
     useEffect(() => {
 
@@ -87,7 +90,34 @@ function AdminAttendancePage({ onBack }) {
 
         return `${hours}h ${mins}m`;
     };
+    
+    const employees = [
+        ...new Map(
+            attendance
+                .filter(record => record.employee)
+                .map(record => [
+                    record.employee.id,
+                    record.employee
+                ])
+        ).values()
+    ];
 
+    const filteredAttendance = attendance.filter((record) => {
+
+        const employeeMatch =
+            selectedEmployee === "ALL" ||
+            String(record.employee?.id) === selectedEmployee;
+
+        const dateMatch =
+            selectedDate === "" ||
+            record.date === selectedDate;
+
+        const statusMatch =
+            selectedStatus === "ALL" ||
+            record.status === selectedStatus;
+
+        return employeeMatch && dateMatch && statusMatch;
+    });
 
     return (
 
@@ -131,7 +161,8 @@ function AdminAttendancePage({ onBack }) {
                     <ClipboardCheck size={18} />
 
                     <span>
-                        {attendance.length} Records
+                        {filteredAttendance.length}{" "}
+                        {filteredAttendance.length === 1 ? "Record" : "Records"}
                     </span>
 
                 </div>
@@ -155,7 +186,85 @@ function AdminAttendancePage({ onBack }) {
 
                     </div>
 
-                    <ClipboardCheck size={24} />
+                    <div className="admin-attendance-filters">
+
+                        <div className="admin-attendance-filter">
+
+                            <UserRound size={16} />
+
+                            <select
+                                value={selectedEmployee}
+                                onChange={(e) =>
+                                    setSelectedEmployee(e.target.value)
+                                }
+                            >
+                                <option value="ALL">
+                                    All Employees
+                                </option>
+
+                                {employees.map((employee) => (
+                                    <option
+                                        key={employee.id}
+                                        value={employee.id}
+                                    >
+                                        {employee.name}
+                                    </option>
+                                ))}
+                            </select>
+
+                        </div>
+
+
+                        <div className="admin-attendance-date-filter">
+
+                            <CalendarDays size={16} />
+
+                            <input
+                                type="date"
+                                value={selectedDate}
+                                onChange={(e) =>
+                                    setSelectedDate(e.target.value)
+                                }
+                            />
+
+                        </div>
+                        <div className="admin-attendance-filter">
+
+                            <ClipboardCheck size={16} />
+
+                            <select
+                                value={selectedStatus}
+                                onChange={(e) =>
+                                    setSelectedStatus(e.target.value)
+                                }
+                            >
+                                <option value="ALL">
+                                    All Status
+                                </option>
+
+                                <option value="PRESENT">
+                                    Present
+                                </option>
+
+                                <option value="ABSENT">
+                                    Absent
+                                </option>
+                            </select>
+
+                        </div>
+                        <button
+                            type="button"
+                            className="admin-attendance-clear-filter"
+                            onClick={() => {
+                                setSelectedEmployee("ALL");
+                                setSelectedDate("");
+                                setSelectedStatus("ALL");
+                            }}
+                        >
+                            Clear Filters
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -232,10 +341,10 @@ function AdminAttendancePage({ onBack }) {
 
                             ) : (
 
-                                attendance
-                                    .slice()
-                                    .reverse()
-                                    .map((record) => (
+                                        filteredAttendance
+                                            .slice()
+                                            .reverse()
+                                            .map((record)  => (
 
                                         <tr key={record.id}>
 
