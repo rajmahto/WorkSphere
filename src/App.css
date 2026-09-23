@@ -6098,3 +6098,553 @@ textarea {
     }
 
 }
+
+
+/* ================================
+   ADMIN USER MANAGEMENT
+================================ */
+
+.admin-users-page .hr-main {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-users-page .hr-back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    background: transparent;
+    color: #315b4c;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+    margin-bottom: 14px;
+    cursor: pointer;
+}
+
+.admin-users-page .hr-back-button:hover {
+    color: #243d33;
+}
+
+.admin-users-page .hr-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    border-radius: 8px;
+    background: #31473A;
+    color: white;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-users-page .hr-primary-button:hover {
+    opacity: 0.92;
+}
+
+.admin-users-page .hr-secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #d5ddd9;
+    border-radius: 8px;
+    background: white;
+    color: #31473A;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-users-page .hr-secondary-button:hover {
+    background: #f3f6f4;
+}
+
+.admin-users-page .hr-section {
+    margin-bottom: 24px;
+}
+
+.admin-users-page .hr-section-heading {
+    margin-bottom: 16px;
+}
+
+.admin-users-page .hr-section-heading h2 {
+    margin-bottom: 5px;
+}
+
+.admin-users-page .hr-section-heading p {
+    margin: 0;
+}
+
+/* Create User Form */
+
+.admin-users-page .hr-form-card {
+    background: white;
+    border: 1px solid #e1e8e4;
+    border-radius: 12px;
+    padding: 22px;
+    margin-top: 18px;
+    box-shadow: 0 4px 14px rgba(49, 71, 58, 0.06);
+}
+
+.admin-users-page .hr-form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.admin-users-page .hr-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.admin-users-page .hr-form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #31473A;
+}
+
+.admin-users-page .hr-form-group input,
+.admin-users-page .hr-form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d5ddd9;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 14px;
+    color: #24352d;
+    background: white;
+    outline: none;
+}
+
+.admin-users-page .hr-form-group input:focus,
+.admin-users-page .hr-form-group select:focus {
+    border-color: #718b7e;
+}
+
+.admin-users-page .hr-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* User Table */
+
+.admin-users-page .hr-table-container {
+    background: white;
+    border: 1px solid #e1e8e4;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(49, 71, 58, 0.05);
+}
+
+.admin-users-page .hr-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-users-page .hr-table th {
+    background: #f3f6f4;
+    color: #31473A;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: left;
+    padding: 14px 18px;
+}
+
+.admin-users-page .hr-table td {
+    padding: 14px 18px;
+    border-top: 1px solid #edf1ef;
+    color: #24352d;
+    font-size: 14px;
+}
+
+.admin-users-page .hr-table tbody tr:hover {
+    background: #fafcfb;
+}
+
+.admin-users-page .hr-empty-state {
+    background: white;
+    border: 1px solid #e1e8e4;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    color: #718078;
+}
+
+/* Responsive */
+
+@media (max-width: 800px) {
+
+    .admin-users-page .hr-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-users-page .hr-table-container {
+        overflow-x: auto;
+    }
+
+    .admin-users-page .hr-table {
+        min-width: 600px;
+    }
+}
+
+/* Fix User Management header alignment */
+
+.admin-users-page .hr-header > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.admin-users-page .hr-back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 14px;
+}
+
+.admin-users-page .hr-page-label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+/* ================================
+   ADMIN USER PAGE - SPACING FIX
+================================ */
+
+.admin-users-page .hr-main {
+    padding-top: 42px;
+    padding-bottom: 60px;
+}
+
+.admin-users-page .hr-header {
+    margin-bottom: 46px;
+}
+
+.admin-users-page .hr-header > div:first-child {
+    gap: 0;
+}
+
+.admin-users-page .hr-back-button {
+    margin-bottom: 22px;
+}
+
+.admin-users-page .hr-page-label {
+    margin-bottom: 10px;
+}
+
+.admin-users-page .hr-header h1 {
+    margin-bottom: 10px;
+}
+
+.admin-users-page .hr-header-subtitle {
+    margin-top: 0;
+}
+
+/* Users section */
+
+.admin-users-page .hr-section {
+    margin-bottom: 38px;
+}
+
+.admin-users-page .hr-section-heading {
+    margin-bottom: 22px;
+}
+
+.admin-users-page .hr-section-heading h2 {
+    margin-bottom: 8px;
+}
+
+.admin-users-page .hr-section-heading p {
+    margin: 0;
+}
+
+/* Keep Add User aligned nicely */
+
+.admin-users-page .hr-section:first-of-type .hr-section-heading {
+    align-items: center;
+}
+
+/* User Accounts */
+
+.admin-users-page .hr-table-container {
+    margin-top: 6px;
+}
+
+.admin-users-page .hr-table th,
+.admin-users-page .hr-table td {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+/* ================================
+   ADMIN USER DELETE
+================================ */
+
+.admin-users-page .admin-user-delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid #e1b8b8;
+    border-radius: 7px;
+    background: #fff7f7;
+    color: #a33a3a;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-users-page .admin-user-delete-button:hover {
+    background: #fdecec;
+}
+
+.admin-user-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 28, 24, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.admin-user-delete-modal {
+    position: relative;
+    width: 100%;
+    max-width: 430px;
+    background: white;
+    border-radius: 14px;
+    padding: 30px;
+    box-sizing: border-box;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+    text-align: center;
+}
+
+.admin-user-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #68756f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.admin-user-modal-close:hover {
+    background: #f1f4f2;
+}
+
+.admin-user-delete-icon {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: #fff0f0;
+    color: #a33a3a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-user-delete-modal h2 {
+    margin: 0 0 10px;
+    color: #24352d;
+    font-size: 22px;
+}
+
+.admin-user-delete-modal p {
+    margin: 0 auto 8px;
+    color: #68756f;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.admin-user-delete-modal p strong {
+    color: #31473A;
+}
+
+.admin-user-delete-warning {
+    display: block;
+    color: #a33a3a;
+    font-size: 13px;
+    margin-bottom: 24px;
+}
+
+.admin-user-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.admin-user-confirm-delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    background: #a33a3a;
+    color: white;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-user-confirm-delete:hover {
+    background: #8f3030;
+}
+
+/* ================================
+   ADMIN USER EDIT MODAL
+   ================================ */
+
+.admin-user-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.admin-user-modal {
+    position: relative;
+    width: 460px;
+    max-width: calc(100% - 32px);
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.admin-user-modal h2 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    color: #163b63;
+}
+
+.admin-user-modal-subtitle {
+    margin: 0 0 26px;
+    color: #718096;
+    font-size: 15px;
+}
+
+.admin-user-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    border: none;
+    background: transparent;
+    font-size: 28px;
+    color: #718096;
+    cursor: pointer;
+}
+
+.admin-user-modal-close:hover {
+    color: #163b63;
+}
+
+.admin-user-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.admin-user-form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.admin-user-form-group input,
+.admin-user-form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #d7dee7;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #1e293b;
+    font-size: 15px;
+    outline: none;
+}
+
+.admin-user-form-group input:focus,
+.admin-user-form-group select:focus {
+    border-color: #31473a;
+    box-shadow: 0 0 0 3px rgba(49, 71, 58, 0.08);
+}
+
+.admin-user-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.admin-user-cancel-button {
+    padding: 11px 20px;
+    border: 1px solid #d7dee7;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-user-cancel-button:hover {
+    background: #f8fafc;
+}
+
+.admin-user-update-button {
+    padding: 11px 20px;
+    border: none;
+    border-radius: 9px;
+    background: #31473a;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-user-update-button:hover {
+    background: #26382e;
+}
+
+/* Admin User Edit Button */
+
+.admin-user-edit-button {
+    padding: 10px 16px;
+    border: 1px solid #31473a;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #31473a;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.admin-user-edit-button:hover {
+    background: #31473a;
+    color: #ffffff;
+}

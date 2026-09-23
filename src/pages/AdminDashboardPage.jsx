@@ -30,6 +30,7 @@ import AdminAttendancePage from "./AdminAttendancePage";
 import AdminPayrollPage from "./AdminPayrollPage";
 import AdminSettingsPage from "./AdminSettingsPage";
 import AdminDepartmentPage from "./AdminDepartmentPage";
+import AdminUserManagementPage from "./AdminUserManagementPage";
 
 
 function AdminDashboardPage({ onLogout, onNotify }) {
@@ -262,6 +263,15 @@ function AdminDashboardPage({ onLogout, onNotify }) {
         );
     }
 
+    if (currentPage === "users") {
+        return (
+            <AdminUserManagementPage
+                onBack={() => setCurrentPage("dashboard")}
+                onNotify={onNotify}
+            />
+        );
+    }
+
     if (currentPage === "settings") {
         return (
             <AdminSettingsPage
@@ -402,7 +412,20 @@ function AdminDashboardPage({ onLogout, onNotify }) {
                         </span>
                     </button>
 
+                    <button
+                        className={`hr-nav-item ${currentPage === "users"
+                            ? "active"
+                            : ""
+                            }`}
+                        onClick={() => setCurrentPage("users")}
+                    >
+                        <Users size={19} />
 
+                        <span>
+                            Users
+                        </span>
+                    </button>
+                    
                     <button
                         className="hr-nav-item"
                         onClick={() => setCurrentPage("settings")}
