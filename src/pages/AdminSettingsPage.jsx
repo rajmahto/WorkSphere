@@ -1,9 +1,11 @@
+import { useState } from "react";
 import {
     ArrowLeft,
     UserRound,
     Building2,
     ShieldCheck,
-    Server
+    Server,
+    LockKeyhole
 } from "lucide-react";
 
 function AdminSettingsPage({ onBack }) {
@@ -15,6 +17,13 @@ function AdminSettingsPage({ onBack }) {
     const role =
         localStorage.getItem("role") ||
         "ADMIN";
+    
+    const [showPasswordForm, setShowPasswordForm] = useState(false);
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordMessage, setPasswordMessage] = useState("");
+    const [passwordError, setPasswordError] = useState("");
 
 
     return (
@@ -199,6 +208,22 @@ function AdminSettingsPage({ onBack }) {
 
                         </div>
 
+                        <button
+                            type="button"
+                            className="admin-settings-password-button"
+                            onClick={() => {
+                                setPasswordMessage("");
+                                setPasswordError("");
+                                setCurrentPassword("");
+                                setNewPassword("");
+                                setConfirmPassword("");
+                                setShowPasswordForm(true);
+                            }}
+                        >
+                            <LockKeyhole size={16} />
+                            Change Password
+                        </button>
+
                     </div>
 
                 </section>
@@ -251,6 +276,116 @@ function AdminSettingsPage({ onBack }) {
                 </section>
 
             </div>
+
+            {showPasswordForm && (
+                <div className="delete-modal-overlay">
+                    <div className="delete-modal password-modal">
+                        <button
+                            type="button"
+                            className="delete-modal-close"
+                            onClick={() => setShowPasswordForm(false)}
+                        >
+                            ×
+                        </button>
+
+                        <div className="delete-modal-icon">
+                            <LockKeyhole size={24} />
+                        </div>
+
+                        <h2>Change Password</h2>
+                        <p>Update your account password</p>
+
+                        {passwordMessage && (
+                            <div className="password-success-message">
+                                {passwordMessage}
+                            </div>
+                        )}
+
+                        {passwordError && (
+                            <div className="password-error-message">
+                                {passwordError}
+                            </div>
+                        )}
+
+                        <input
+                            type="password"
+                            placeholder="Current password"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                        />
+
+                        <input
+                            type="password"
+                            placeholder="New password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                        />
+
+                        <input
+                            type="password"
+                            placeholder="Confirm new password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+
+                        <div className="delete-modal-actions">
+                            <button
+                                type="button"
+                                className="delete-modal-cancel"
+                                onClick={() => setShowPasswordForm(false)}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                className="password-change-button"
+                                onClick={async () => {
+                                    if (newPassword !== confirmPassword) {
+                                        setPasswordError("New passwords do not match");
+                                        setPasswordMessage("");
+                                        return;
+                                    }
+
+                                    try {
+                                        const response = await fetch("http://localhost:8080/users/password", {
+                                            method: "PUT",
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                                Authorization: `Bearer ${localStorage.getItem("token")}`
+                                            },
+                                            body: JSON.stringify({
+                                                currentPassword,
+                                                newPassword
+                                            })
+                                        });
+
+                                        const data = await response.text();
+
+                                        if (!response.ok) {
+                                            throw new Error(data);
+                                        }
+
+                                        setPasswordMessage("Password changed successfully");
+                                        setPasswordError("");
+
+                                        setCurrentPassword("");
+                                        setNewPassword("");
+                                        setConfirmPassword("");
+                                        // setShowPasswordForm(false);
+
+                                    } catch (error) {
+                                        setPasswordError(error.message || "Failed to change password");
+                                        setPasswordMessage("");
+                                    }
+                                }}
+                            >
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );

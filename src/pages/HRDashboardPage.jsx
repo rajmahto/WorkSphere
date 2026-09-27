@@ -23,6 +23,7 @@ import EmployeeManagementPage from "./EmployeeManagementPage";
 import AdminAttendancePage from "./AdminAttendancePage";
 import AdminPayrollPage from "./AdminPayrollPage";
 import HRProfilePage from "./HRProfilePage";
+import AiAnalyticsPage from "./AiAnalyticsPage";
 
 
 function HRDashboardPage({ onLogout, onNotify }) {
@@ -188,6 +189,14 @@ function HRDashboardPage({ onLogout, onNotify }) {
                 onBack={() =>
                     navigate("dashboard")
                 }
+            />
+        );
+    }
+
+    if (currentPage === "ai-analytics") {
+        return (
+            <AiAnalyticsPage
+                onBack={() => navigate("dashboard")}
             />
         );
     }
@@ -490,13 +499,7 @@ function HRDashboardPage({ onLogout, onNotify }) {
 
                     <button
                         className="hr-stat-card"
-                        onClick={() =>
-                            onNotify({
-                                type: "info",
-                                message:
-                                    "Attendance details will be available here."
-                            })
-                        }
+                        onClick={() => navigate("attendance")}
                     >
 
                         <div className="hr-stat-icon attendance">
@@ -560,13 +563,7 @@ function HRDashboardPage({ onLogout, onNotify }) {
 
                     <button
                         className="hr-stat-card"
-                        onClick={() =>
-                            onNotify({
-                                type: "info",
-                                message:
-                                    "Payroll management is coming next."
-                            })
-                        }
+                        onClick={() => navigate("payroll")}
                     >
 
                         <div className="hr-stat-icon payroll">
@@ -621,6 +618,30 @@ function HRDashboardPage({ onLogout, onNotify }) {
 
 
                         <div className="hr-operation-grid">
+
+                            <button
+                                className="hr-operation-card"
+                                onClick={() => navigate("ai-analytics")}
+                            >
+                                <div className="hr-operation-icon">
+                                    ✨
+                                </div>
+
+                                <div className="hr-operation-content">
+                                    <strong>
+                                        AI HR Analytics
+                                    </strong>
+
+                                    <span>
+                                        Analyze attendance and HR data
+                                    </span>
+                                </div>
+
+                                <ChevronRight
+                                    className="hr-operation-arrow"
+                                    size={18}
+                                />
+                            </button>
 
                             <button
                                 className="hr-operation-card"
@@ -686,13 +707,7 @@ function HRDashboardPage({ onLogout, onNotify }) {
 
                             <button
                                 className="hr-operation-card"
-                                onClick={() =>
-                                    onNotify({
-                                        type: "info",
-                                        message:
-                                            "Attendance management is coming next."
-                                    })
-                                }
+                                onClick={() => navigate("attendance")}
                             >
 
                                 <div className="hr-operation-icon attendance">

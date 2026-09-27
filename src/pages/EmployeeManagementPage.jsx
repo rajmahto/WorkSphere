@@ -14,6 +14,8 @@ import {
     UserPlus,
     Pencil,
     Trash2,
+    Search,
+    Eye,
 } from "lucide-react";
 
 import "../App.css";
@@ -27,6 +29,9 @@ function EmployeeManagementPage({ onBack, onNotify }) {
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [selectedDepartment, setSelectedDepartment] = useState("");
+    const [selectedDesignation, setSelectedDesignation] = useState("");
     const [showAddForm, setShowAddForm] = useState(false);
     const [showEditForm, setShowEditForm] = useState(false);
     const [editingEmployee, setEditingEmployee] = useState(null);
@@ -42,6 +47,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
     const [departments, setDepartments] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedEmployee, setSelectedEmployee] = useState(null);
+    const [showDetails, setShowDetails] = useState(false);
 
 
     useEffect(() => {
@@ -261,6 +267,25 @@ function EmployeeManagementPage({ onBack, onNotify }) {
             });
         }
     };
+
+    const filteredEmployees = employees.filter((employee) => {
+        const search = searchTerm.toLowerCase();
+
+        const matchesSearch =
+            employee.name?.toLowerCase().includes(search) ||
+            employee.email?.toLowerCase().includes(search);
+
+        const matchesDepartment =
+            selectedDepartment === "" ||
+            employee.department?.id === Number(selectedDepartment);
+
+        const matchesDesignation =
+            selectedDesignation === "" ||
+            employee.designation === selectedDesignation;
+
+        return matchesSearch && matchesDepartment && matchesDesignation;
+    });
+
     const formatDate = (date) => {
 
         if (!date) return "—";
@@ -668,8 +693,67 @@ function EmployeeManagementPage({ onBack, onNotify }) {
 
                     </div>
 
-                    <div className="employee-directory-icon">
-                        <Users size={20} />
+                    <div className="employee-directory-actions">
+
+                        <div className="employee-search-box">
+                            <Search size={17} />
+
+                            <input
+                                type="text"
+                                placeholder="Search employees..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </div>
+
+                        <select
+                            className="employee-department-filter"
+                            value={selectedDepartment}
+                            onChange={(e) => setSelectedDepartment(e.target.value)}
+                        >
+                            <option value="">All Departments</option>
+
+                            {departments.map((department) => (
+                                <option key={department.id} value={department.id}>
+                                    {department.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        <select
+                            className="employee-department-filter"
+                            value={selectedDesignation}
+                            onChange={(e) => setSelectedDesignation(e.target.value)}
+                        >
+                            <option value="">All Designations</option>
+
+                            {[...new Set(
+                                employees
+                                    .map((employee) => employee.designation)
+                                    .filter(Boolean)
+                            )].map((designation) => (
+                                <option key={designation} value={designation}>
+                                    {designation}
+                                </option>
+                            ))}
+                        </select>
+
+                        <button
+                            type="button"
+                            className="employee-clear-filter"
+                            onClick={() => {
+                                setSearchTerm("");
+                                setSelectedDepartment("");
+                                setSelectedDesignation("");
+                            }}
+                        >
+                            Clear
+                        </button>
+
+                        <div className="employee-directory-icon">
+                            <Users size={20} />
+                        </div>
+
                     </div>
 
                 </div>
@@ -781,8 +865,8 @@ function EmployeeManagementPage({ onBack, onNotify }) {
 
                             ) : (
 
-                                employees.map(
-                                    (employee) => (
+                                        filteredEmployees.map(
+                                            (employee) => (
 
                                         <tr
                                             key={employee.id}
@@ -931,7 +1015,19 @@ function EmployeeManagementPage({ onBack, onNotify }) {
 
                                             </td>
                                             <td>
-                                                <div className="employee-action-buttons">
+                                                        <div className="employee-action-buttons">
+                                                            
+                                                            <button
+                                                                type="button"
+                                                                className="employee-view-button"
+                                                                onClick={() => {
+                                                                    setSelectedEmployee(employee);
+                                                                    setShowDetails(true);
+                                                                }}
+                                                            >
+                                                                <Eye size={15} />
+                                                                View
+                                                            </button>
                                                     <button
                                                         type="button"
                                                         className="edit-employee-button"
@@ -974,6 +1070,80 @@ function EmployeeManagementPage({ onBack, onNotify }) {
                 </div>
 
             </section>
+
+            {showDetails && selectedEmployee && (
+                <div className="delete-modal-overlay">
+                    <div className="delete-modal">
+                        <button
+                            type="button"
+                            className="delete-modal-close"
+                            onClick={() => {
+                                setShowDetails(false);
+                                setSelectedEmployee(null);
+                            }}
+                        >
+                            ×
+                        </button>
+
+                        <div className="delete-modal-icon">
+                            <Eye size={24} />
+                        </div>
+
+                        <div className="employee-modal-avatar">
+                            {selectedEmployee.name
+                                .split(" ")
+                                .map(word => word[0])
+                                .join("")
+                                .slice(0, 2)
+                                .toUpperCase()}
+                        </div>
+
+                        <h2>{selectedEmployee.name}</h2>
+                        <p>Employee Details</p>
+
+                        <div>
+                            <strong>Email:</strong> {selectedEmployee.email || "—"}
+                        </div>
+
+                        <div>
+                            <strong>Phone:</strong> {selectedEmployee.phone || "—"}
+                        </div>
+
+                        <div>
+                            <strong>Designation:</strong>{" "}
+                            {selectedEmployee.designation || "—"}
+                        </div>
+
+                        <div>
+                            <strong>Department:</strong>{" "}
+                            {selectedEmployee.department?.name || "—"}
+                        </div>
+
+                        <div>
+                            <strong>Joining Date:</strong>{" "}
+                            {formatDate(selectedEmployee.joiningDate)}
+                        </div>
+
+                        <div>
+                            <strong>Salary:</strong>{" "}
+                            {formatSalary(selectedEmployee.salary)}
+                        </div>
+
+                        <div className="delete-modal-actions">
+                            <button
+                                type="button"
+                                className="delete-modal-cancel"
+                                onClick={() => {
+                                    setShowDetails(false);
+                                    setSelectedEmployee(null);
+                                }}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {showDeleteModal && selectedEmployee && (
                 <div className="delete-modal-overlay">

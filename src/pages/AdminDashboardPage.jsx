@@ -31,6 +31,7 @@ import AdminPayrollPage from "./AdminPayrollPage";
 import AdminSettingsPage from "./AdminSettingsPage";
 import AdminDepartmentPage from "./AdminDepartmentPage";
 import AdminUserManagementPage from "./AdminUserManagementPage";
+import AiAnalyticsPage from "./AiAnalyticsPage";
 
 
 function AdminDashboardPage({ onLogout, onNotify }) {
@@ -46,6 +47,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
     const [attendance, setAttendance] = useState([]);
     const [leaves, setLeaves] = useState([]);
     const [payrolls, setPayrolls] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const [loading, setLoading] = useState(true);
 
@@ -84,7 +86,8 @@ function AdminDashboardPage({ onLogout, onNotify }) {
                 employeesResponse,
                 attendanceResponse,
                 leavesResponse,
-                payrollResponse
+                payrollResponse,
+                usersResponse
             ] = await Promise.all([
 
                 fetch(
@@ -104,6 +107,11 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
                 fetch(
                     "http://localhost:8080/payrolls",
+                    { headers }
+                ),
+
+                fetch(
+                    "http://localhost:8080/users",
                     { headers }
                 )
             ]);
@@ -132,6 +140,9 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
             const payrollData =
                 await payrollResponse.json();
+            
+            const usersData = await usersResponse.json();
+            setUsers(usersData);
 
 
             setEmployees(
@@ -276,6 +287,14 @@ function AdminDashboardPage({ onLogout, onNotify }) {
         return (
             <AdminSettingsPage
                 onBack={() => setCurrentPage("dashboard")}
+            />
+        );
+    }
+
+    if (currentPage === "ai-analytics") {
+        return (
+            <AiAnalyticsPage
+                onBack={() => navigate("dashboard")}
             />
         );
     }
@@ -569,13 +588,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
                     <button
                         className="hr-stat-card"
-                        onClick={() =>
-                            onNotify({
-                                type: "info",
-                                message:
-                                    "Attendance details will be available here."
-                            })
-                        }
+                        onClick={() => setCurrentPage("attendance")}
                     >
 
                         <div className="hr-stat-icon attendance">
@@ -639,13 +652,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
                     <button
                         className="hr-stat-card"
-                        onClick={() =>
-                            onNotify({
-                                type: "info",
-                                message:
-                                    "Payroll management is coming next."
-                            })
-                        }
+                        onClick={() => setCurrentPage("payroll")}
                     >
 
                         <div className="hr-stat-icon payroll">
@@ -671,6 +678,32 @@ function AdminDashboardPage({ onLogout, onNotify }) {
                             size={18}
                         />
 
+                    </button>
+
+                    <button
+                        className="hr-stat-card hr-stat-clickable"
+                        onClick={() => navigate("users")}
+                    >
+                        <div className="hr-stat-icon employees">
+                            <Users size={21} />
+                        </div>
+
+                        <div className="hr-stat-content">
+                            <span>
+                                Total Users
+                            </span>
+
+                            <strong>
+                                {loading
+                                    ? "—"
+                                    : users.length}
+                            </strong>
+                        </div>
+
+                        <ChevronRight
+                            className="hr-stat-arrow"
+                            size={18}
+                        />
                     </button>
 
                 </section>
@@ -702,6 +735,30 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
 
                         <div className="hr-operation-grid">
+
+                            <button
+                                className="hr-operation-card"
+                                onClick={() => navigate("ai-analytics")}
+                            >
+                                <div className="hr-operation-icon">
+                                    ✨
+                                </div>
+
+                                <div className="hr-operation-content">
+                                    <strong>
+                                        AI HR Analytics
+                                    </strong>
+
+                                    <span>
+                                        Analyze attendance and HR data
+                                    </span>
+                                </div>
+
+                                <ChevronRight
+                                    className="hr-operation-arrow"
+                                    size={18}
+                                />
+                            </button>
 
                             <button
                                 className="hr-operation-card"
@@ -767,13 +824,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
                             <button
                                 className="hr-operation-card"
-                                onClick={() =>
-                                    onNotify({
-                                        type: "info",
-                                        message:
-                                            "System settings are coming next."
-                                    })
-                                }
+                                onClick={() => setCurrentPage("settings")}
                             >
 
                                 <div className="hr-operation-icon settings">

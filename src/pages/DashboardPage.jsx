@@ -9,13 +9,16 @@ import {
     ChevronRight,
     CheckCircle2,
     Clock3,
-    Sparkles
+    Sparkles,
+    Bot
 } from "lucide-react";
 
 import AttendancePage from "./AttendancePage";
 import LeavePage from "./LeavePage";
 import PayrollPage from "./PayrollPage";
 import EmployeeProfilePage from "./EmployeeProfilePage";
+import AiAssistantPage from "./AiAssistantPage";
+import AiAnalyticsPage from "./AiAnalyticsPage";
 import "../App.css";
 
 function DashboardPage({ onLogout, onNotify }) {
@@ -158,6 +161,22 @@ function DashboardPage({ onLogout, onNotify }) {
     /*
      * Employee sub-pages
      */
+
+    if (currentPage === "ai-assistant") {
+        return (
+            <AiAssistantPage
+                onBack={() => setCurrentPage("dashboard")}
+            />
+        );
+    }
+
+    if (currentPage === "ai-analytics") {
+        return (
+            <AiAnalyticsPage
+                onBack={() => setCurrentPage("dashboard")}
+            />
+        );
+    }
 
     if (currentPage === "attendance") {
 
@@ -528,6 +547,10 @@ function DashboardPage({ onLogout, onNotify }) {
 
 
                     <div className="hr-operation-grid">
+   
+                        
+                        
+                        
 
                         <button
                             type="button"
@@ -809,6 +832,7 @@ function DashboardPage({ onLogout, onNotify }) {
                     <button
                         type="button"
                         className="hr-operation-card ai-operation-card"
+                        onClick={() => setCurrentPage("ai-assistant")}
                     >
 
                         <div className="hr-operation-icon">
