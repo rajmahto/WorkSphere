@@ -25,4 +25,17 @@ public class DepartmentController {
     public List<Department> getAllDepartments() {
         return departmentService.getAllDepartments();
     }
+
+    @PutMapping("/{id}")
+    public Department updateDepartment(
+            @PathVariable Long id,
+            @RequestBody Department department) {
+
+        return departmentService.updateDepartment(id, department);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteDepartment(@PathVariable Long id) {
+        departmentService.deleteDepartment(id);
+    }
 }

@@ -64,4 +64,13 @@ public class PayrollController {
         payrollService.deletePayroll(id);
         return "Payroll deleted successfully";
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
+    @PutMapping("/{id}")
+    public Payroll updatePayroll(
+            @PathVariable Long id,
+            @RequestBody Payroll payroll
+    ) {
+        return payrollService.updatePayroll(id, payroll);
+    }
 }

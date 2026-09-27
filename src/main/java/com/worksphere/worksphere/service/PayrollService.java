@@ -43,4 +43,31 @@ public class PayrollService {
     public void deletePayroll(Long id) {
         payrollRepository.deleteById(id);
     }
+
+    public Payroll updatePayroll(Long id, Payroll payroll) {
+
+        Payroll existingPayroll =
+                payrollRepository.findById(id).orElse(null);
+
+        if (existingPayroll == null) {
+            return null;
+        }
+
+        existingPayroll.setBasicSalary(payroll.getBasicSalary());
+        existingPayroll.setHra(payroll.getHra());
+        existingPayroll.setAllowances(payroll.getAllowances());
+        existingPayroll.setDeductions(payroll.getDeductions());
+        existingPayroll.setMonth(payroll.getMonth());
+        existingPayroll.setYear(payroll.getYear());
+
+        double netSalary =
+                payroll.getBasicSalary()
+                        + payroll.getHra()
+                        + payroll.getAllowances()
+                        - payroll.getDeductions();
+
+        existingPayroll.setNetSalary(netSalary);
+
+        return payrollRepository.save(existingPayroll);
+    }
 }

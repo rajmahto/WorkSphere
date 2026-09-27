@@ -6,6 +6,8 @@ import com.worksphere.worksphere.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -28,12 +30,27 @@ public class UserService {
             throw new RuntimeException("Email already registered");
         }
 
+        if (user.getRole() == null || user.getRole().isBlank()) {
+            throw new RuntimeException("Role is required");
+        }
+
+        String role = user.getRole().toUpperCase();
+
+        if (!role.equals("ADMIN")
+                && !role.equals("HR")
+                && !role.equals("EMPLOYEE")) {
+
+            throw new RuntimeException(
+                    "Invalid role. Use ADMIN, HR or EMPLOYEE"
+            );
+        }
+
+        user.setRole(role);
+
         String encodedPassword =
                 passwordEncoder.encode(user.getPassword());
 
         user.setPassword(encodedPassword);
-
-        user.setRole("EMPLOYEE");
 
         return userRepository.save(user);
     }
@@ -64,5 +81,75 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public void changePassword(String email, String currentPassword, String newPassword) {
+
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new RuntimeException("Current password is incorrect");
+        }
+
+        if (newPassword == null || newPassword.isBlank()) {
+            throw new RuntimeException("New password is required");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepository.save(user);
+    }
+
+    public User updateUser(Long id, User user) {
+
+        User existingUser =
+                userRepository.findById(id).orElse(null);
+
+        if (existingUser == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            existingUser.setEmail(user.getEmail());
+        }
+
+        if (user.getRole() != null && !user.getRole().isBlank()) {
+
+            String role = user.getRole().toUpperCase();
+
+            if (!role.equals("ADMIN")
+                    && !role.equals("HR")
+                    && !role.equals("EMPLOYEE")) {
+
+                throw new RuntimeException(
+                        "Invalid role. Use ADMIN, HR or EMPLOYEE"
+                );
+            }
+
+            existingUser.setRole(role);
+        }
+
+        if (user.getPassword() != null
+                && !user.getPassword().isBlank()) {
+
+            String encodedPassword =
+                    passwordEncoder.encode(user.getPassword());
+
+            existingUser.setPassword(encodedPassword);
+        }
+
+        return userRepository.save(existingUser);
     }
 }
