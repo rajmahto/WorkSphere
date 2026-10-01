@@ -26,7 +26,7 @@ function AdminAttendancePage({ onBack }) {
             try {
 
                 const response = await fetch(
-                    "http://https://worksphere-f0vt.onrender.com/attendance",
+                    "https://worksphere-f0vt.onrender.com/attendance",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`

@@ -26,7 +26,7 @@ function AiAssistantPage({ onBack }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/ai/hr-assistant/chat",
+                "https://worksphere-f0vt.onrender.com/ai/hr-assistant/chat",
                 {
                     method: "POST",
                     headers: {

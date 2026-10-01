@@ -32,7 +32,7 @@ function HRLeavePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/leaves/pending",
+                "https://worksphere-f0vt.onrender.com/leaves/pending",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -90,7 +90,7 @@ function HRLeavePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                `http://https://worksphere-f0vt.onrender.com/leaves/${id}/${action}`,
+                `https://worksphere-f0vt.onrender.com/leaves/${id}/${action}`,
                 {
                     method: "PUT",
                     headers: {

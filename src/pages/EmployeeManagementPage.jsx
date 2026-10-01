@@ -61,7 +61,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/employees",
+                "https://worksphere-f0vt.onrender.com/employees",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -104,7 +104,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
     const fetchDepartments = async () => {
         try {
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/departments",
+                "https://worksphere-f0vt.onrender.com/departments",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -137,7 +137,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/employees",
+                "https://worksphere-f0vt.onrender.com/employees",
                 {
                     method: "POST",
                     headers: {
@@ -193,7 +193,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
     const handleUpdateEmployee = async () => {
         try {
             const response = await fetch(
-                `http://https://worksphere-f0vt.onrender.com/employees/${editingEmployee.id}`,
+                `https://worksphere-f0vt.onrender.com/employees/${editingEmployee.id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -236,7 +236,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
     const handleDeleteEmployee = async (employeeId, employeeName) => {
         try {
             const response = await fetch(
-                `http://https://worksphere-f0vt.onrender.com/employees/${employeeId}`,
+                `https://worksphere-f0vt.onrender.com/employees/${employeeId}`,
                 {
                     method: "DELETE",
                     headers: {

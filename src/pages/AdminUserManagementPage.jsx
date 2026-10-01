@@ -35,7 +35,7 @@ function AdminUserManagementPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/users",
+                "https://worksphere-f0vt.onrender.com/users",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -82,7 +82,7 @@ function AdminUserManagementPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/users",
+                "https://worksphere-f0vt.onrender.com/users",
                 {
                     method: "POST",
                     headers: {
@@ -140,7 +140,7 @@ function AdminUserManagementPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                `http://https://worksphere-f0vt.onrender.com/users/${userToDelete.id}`,
+                `https://worksphere-f0vt.onrender.com/users/${userToDelete.id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -196,7 +196,7 @@ function AdminUserManagementPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                `http://https://worksphere-f0vt.onrender.com/users/${userToEdit.id}`,
+                `https://worksphere-f0vt.onrender.com/users/${userToEdit.id}`,
                 {
                     method: "PUT",
                     headers: {

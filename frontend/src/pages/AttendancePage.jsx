@@ -21,7 +21,7 @@ function AttendancePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/attendance/my",
+                "https://worksphere-f0vt.onrender.com/attendance/my",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -113,7 +113,7 @@ function AttendancePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/attendance/my",
+                "https://worksphere-f0vt.onrender.com/attendance/my",
                 {
                     method: "POST",
                     headers: {
@@ -179,7 +179,7 @@ function AttendancePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/attendance/my/checkout",
+                "https://worksphere-f0vt.onrender.com/attendance/my/checkout",
                 {
                     method: "PUT",
                     headers: {

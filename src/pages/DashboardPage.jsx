@@ -55,15 +55,15 @@ function DashboardPage({ onLogout, onNotify }) {
                     balanceResponse
                 ] = await Promise.all([
                     fetch(
-                        "http://https://worksphere-f0vt.onrender.com/attendance/my",
+                        "https://worksphere-f0vt.onrender.com/attendance/my",
                         { headers }
                     ),
                     fetch(
-                        "http://https://worksphere-f0vt.onrender.com/payrolls/my",
+                        "https://worksphere-f0vt.onrender.com/payrolls/my",
                         { headers }
                     ),
                     fetch(
-                        "http://https://worksphere-f0vt.onrender.com/leave-balances/my",
+                        "https://worksphere-f0vt.onrender.com/leave-balances/my",
                         { headers }
                     )
                 ]);

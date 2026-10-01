@@ -29,7 +29,7 @@ function PayrollPage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://https://worksphere-f0vt.onrender.com/payrolls/my",
+                "https://worksphere-f0vt.onrender.com/payrolls/my",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`

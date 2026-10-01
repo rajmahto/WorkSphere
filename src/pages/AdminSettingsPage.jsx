@@ -348,7 +348,7 @@ function AdminSettingsPage({ onBack }) {
                                     }
 
                                     try {
-                                        const response = await fetch("http://https://worksphere-f0vt.onrender.com/users/password", {
+                                        const response = await fetch("https://worksphere-f0vt.onrender.com/users/password", {
                                             method: "PUT",
                                             headers: {
                                                 "Content-Type": "application/json",

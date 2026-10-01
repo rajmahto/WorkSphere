@@ -75,17 +75,17 @@ function HRDashboardPage({ onLogout, onNotify }) {
             ] = await Promise.all([
 
                 fetch(
-                    "http://https://worksphere-f0vt.onrender.com/employees",
+                    "https://worksphere-f0vt.onrender.com/employees",
                     { headers }
                 ),
 
                 fetch(
-                    "http://https://worksphere-f0vt.onrender.com/attendance",
+                    "https://worksphere-f0vt.onrender.com/attendance",
                     { headers }
                 ),
 
                 fetch(
-                    "http://https://worksphere-f0vt.onrender.com/leaves",
+                    "https://worksphere-f0vt.onrender.com/leaves",
                     { headers }
                 )
             ]);
