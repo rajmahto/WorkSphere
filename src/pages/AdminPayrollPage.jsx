@@ -60,7 +60,7 @@ function AdminPayrollPage({ onBack, onNotify }) {
     const fetchPayrolls = async () => {
         try {
             const response = await fetch(
-                "http://localhost:8080/payrolls",
+                "http://https://worksphere-f0vt.onrender.com/payrolls",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -97,7 +97,7 @@ function AdminPayrollPage({ onBack, onNotify }) {
 
             if (editingPayroll) {
                 response = await fetch(
-                    `http://localhost:8080/payrolls/${editingPayroll.id}`,
+                    `http://https://worksphere-f0vt.onrender.com/payrolls/${editingPayroll.id}`,
                     {
                         method: "PUT",
                         headers: {
@@ -109,7 +109,7 @@ function AdminPayrollPage({ onBack, onNotify }) {
                 );
             } else {
                 response = await fetch(
-                    "http://localhost:8080/payrolls",
+                    "http://https://worksphere-f0vt.onrender.com/payrolls",
                     {
                         method: "POST",
                         headers: {
@@ -172,7 +172,7 @@ function AdminPayrollPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                `http://localhost:8080/payrolls/${id}`,
+                `http://https://worksphere-f0vt.onrender.com/payrolls/${id}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -186,7 +186,7 @@ function AdminPayrollPage({ onBack, onNotify }) {
             }
 
             const payrollResponse = await fetch(
-                "http://localhost:8080/payrolls",
+                "http://https://worksphere-f0vt.onrender.com/payrolls",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -233,7 +233,7 @@ function AdminPayrollPage({ onBack, onNotify }) {
 
     useEffect(() => {
 
-       
+
 
         fetchPayrolls();
 
@@ -823,7 +823,7 @@ function AdminPayrollPage({ onBack, onNotify }) {
                             >
                                 Cancel
                             </button>
-    
+
                             <button
                                 type="button"
                                 className="payroll-confirm-delete-button"

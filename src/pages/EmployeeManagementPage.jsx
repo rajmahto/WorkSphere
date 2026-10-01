@@ -61,7 +61,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/employees",
+                "http://https://worksphere-f0vt.onrender.com/employees",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -104,7 +104,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
     const fetchDepartments = async () => {
         try {
             const response = await fetch(
-                "http://localhost:8080/departments",
+                "http://https://worksphere-f0vt.onrender.com/departments",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -137,7 +137,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/employees",
+                "http://https://worksphere-f0vt.onrender.com/employees",
                 {
                     method: "POST",
                     headers: {
@@ -193,7 +193,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
     const handleUpdateEmployee = async () => {
         try {
             const response = await fetch(
-                `http://localhost:8080/employees/${editingEmployee.id}`,
+                `http://https://worksphere-f0vt.onrender.com/employees/${editingEmployee.id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -236,7 +236,7 @@ function EmployeeManagementPage({ onBack, onNotify }) {
     const handleDeleteEmployee = async (employeeId, employeeName) => {
         try {
             const response = await fetch(
-                `http://localhost:8080/employees/${employeeId}`,
+                `http://https://worksphere-f0vt.onrender.com/employees/${employeeId}`,
                 {
                     method: "DELETE",
                     headers: {
@@ -865,8 +865,8 @@ function EmployeeManagementPage({ onBack, onNotify }) {
 
                             ) : (
 
-                                        filteredEmployees.map(
-                                            (employee) => (
+                                filteredEmployees.map(
+                                    (employee) => (
 
                                         <tr
                                             key={employee.id}
@@ -1015,19 +1015,19 @@ function EmployeeManagementPage({ onBack, onNotify }) {
 
                                             </td>
                                             <td>
-                                                        <div className="employee-action-buttons">
-                                                            
-                                                            <button
-                                                                type="button"
-                                                                className="employee-view-button"
-                                                                onClick={() => {
-                                                                    setSelectedEmployee(employee);
-                                                                    setShowDetails(true);
-                                                                }}
-                                                            >
-                                                                <Eye size={15} />
-                                                                View
-                                                            </button>
+                                                <div className="employee-action-buttons">
+
+                                                    <button
+                                                        type="button"
+                                                        className="employee-view-button"
+                                                        onClick={() => {
+                                                            setSelectedEmployee(employee);
+                                                            setShowDetails(true);
+                                                        }}
+                                                    >
+                                                        <Eye size={15} />
+                                                        View
+                                                    </button>
                                                     <button
                                                         type="button"
                                                         className="edit-employee-button"

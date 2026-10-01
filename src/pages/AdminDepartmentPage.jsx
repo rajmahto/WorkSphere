@@ -22,7 +22,7 @@ function AdminDepartmentPage({ onBack, onNotify }) {
     const fetchDepartments = async () => {
         try {
             const response = await fetch(
-                "http://localhost:8080/departments",
+                "http://https://worksphere-f0vt.onrender.com/departments",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -60,7 +60,7 @@ function AdminDepartmentPage({ onBack, onNotify }) {
 
         try {
             const response = await fetch(
-                "http://localhost:8080/departments",
+                "http://https://worksphere-f0vt.onrender.com/departments",
                 {
                     method: "POST",
                     headers: {
@@ -117,7 +117,7 @@ function AdminDepartmentPage({ onBack, onNotify }) {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/departments/${editingDepartment.id}`,
+                `http://https://worksphere-f0vt.onrender.com/departments/${editingDepartment.id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -159,7 +159,7 @@ function AdminDepartmentPage({ onBack, onNotify }) {
     const handleDeleteDepartment = async (department) => {
         try {
             const response = await fetch(
-                `http://localhost:8080/departments/${department.id}`,
+                `http://https://worksphere-f0vt.onrender.com/departments/${department.id}`,
                 {
                     method: "DELETE",
                     headers: {

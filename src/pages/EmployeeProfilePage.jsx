@@ -23,7 +23,7 @@ function EmployeeProfilePage({ onBack }) {
             try {
 
                 const response = await fetch(
-                    "http://localhost:8080/employees/my",
+                    "http://https://worksphere-f0vt.onrender.com/employees/my",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`

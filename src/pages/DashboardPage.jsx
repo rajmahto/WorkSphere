@@ -55,15 +55,15 @@ function DashboardPage({ onLogout, onNotify }) {
                     balanceResponse
                 ] = await Promise.all([
                     fetch(
-                        "http://localhost:8080/attendance/my",
+                        "http://https://worksphere-f0vt.onrender.com/attendance/my",
                         { headers }
                     ),
                     fetch(
-                        "http://localhost:8080/payrolls/my",
+                        "http://https://worksphere-f0vt.onrender.com/payrolls/my",
                         { headers }
                     ),
                     fetch(
-                        "http://localhost:8080/leave-balances/my",
+                        "http://https://worksphere-f0vt.onrender.com/leave-balances/my",
                         { headers }
                     )
                 ]);
@@ -236,8 +236,8 @@ function DashboardPage({ onLogout, onNotify }) {
                     <button
                         type="button"
                         className={`hr-nav-item ${currentPage === "dashboard"
-                                ? "active"
-                                : ""
+                            ? "active"
+                            : ""
                             }`}
                         onClick={() =>
                             handleNavigation("dashboard")
@@ -255,8 +255,8 @@ function DashboardPage({ onLogout, onNotify }) {
                     <button
                         type="button"
                         className={`hr-nav-item ${currentPage === "attendance"
-                                ? "active"
-                                : ""
+                            ? "active"
+                            : ""
                             }`}
                         onClick={() =>
                             handleNavigation("attendance")
@@ -274,8 +274,8 @@ function DashboardPage({ onLogout, onNotify }) {
                     <button
                         type="button"
                         className={`hr-nav-item ${currentPage === "leave"
-                                ? "active"
-                                : ""
+                            ? "active"
+                            : ""
                             }`}
                         onClick={() =>
                             handleNavigation("leave")
@@ -293,8 +293,8 @@ function DashboardPage({ onLogout, onNotify }) {
                     <button
                         type="button"
                         className={`hr-nav-item ${currentPage === "payroll"
-                                ? "active"
-                                : ""
+                            ? "active"
+                            : ""
                             }`}
                         onClick={() =>
                             handleNavigation("payroll")
@@ -547,10 +547,10 @@ function DashboardPage({ onLogout, onNotify }) {
 
 
                     <div className="hr-operation-grid">
-   
-                        
-                        
-                        
+
+
+
+
 
                         <button
                             type="button"

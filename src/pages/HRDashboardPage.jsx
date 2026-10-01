@@ -75,17 +75,17 @@ function HRDashboardPage({ onLogout, onNotify }) {
             ] = await Promise.all([
 
                 fetch(
-                    "http://localhost:8080/employees",
+                    "http://https://worksphere-f0vt.onrender.com/employees",
                     { headers }
                 ),
 
                 fetch(
-                    "http://localhost:8080/attendance",
+                    "http://https://worksphere-f0vt.onrender.com/attendance",
                     { headers }
                 ),
 
                 fetch(
-                    "http://localhost:8080/leaves",
+                    "http://https://worksphere-f0vt.onrender.com/leaves",
                     { headers }
                 )
             ]);
@@ -278,8 +278,8 @@ function HRDashboardPage({ onLogout, onNotify }) {
 
                     <button
                         className={`hr-nav-item ${currentPage === "dashboard"
-                                ? "active"
-                                : ""
+                            ? "active"
+                            : ""
                             }`}
                         onClick={() =>
                             navigate("dashboard")

@@ -21,7 +21,7 @@ function AttendancePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/attendance/my",
+                "http://https://worksphere-f0vt.onrender.com/attendance/my",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -113,7 +113,7 @@ function AttendancePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/attendance/my",
+                "http://https://worksphere-f0vt.onrender.com/attendance/my",
                 {
                     method: "POST",
                     headers: {
@@ -179,7 +179,7 @@ function AttendancePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/attendance/my/checkout",
+                "http://https://worksphere-f0vt.onrender.com/attendance/my/checkout",
                 {
                     method: "PUT",
                     headers: {
@@ -580,8 +580,8 @@ function AttendancePage({ onNotify, onBack }) {
 
                                                 <span
                                                     className={`status-badge ${record.checkOut
-                                                            ? "completed"
-                                                            : record.status?.toLowerCase()
+                                                        ? "completed"
+                                                        : record.status?.toLowerCase()
                                                         }`}
                                                 >
                                                     {record.checkOut

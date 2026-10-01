@@ -17,7 +17,7 @@ function AdminSettingsPage({ onBack }) {
     const role =
         localStorage.getItem("role") ||
         "ADMIN";
-    
+
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -348,7 +348,7 @@ function AdminSettingsPage({ onBack }) {
                                     }
 
                                     try {
-                                        const response = await fetch("http://localhost:8080/users/password", {
+                                        const response = await fetch("http://https://worksphere-f0vt.onrender.com/users/password", {
                                             method: "PUT",
                                             headers: {
                                                 "Content-Type": "application/json",

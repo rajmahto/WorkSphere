@@ -16,7 +16,7 @@ function AiAnalyticsPage({ onBack }) {
             try {
 
                 const response = await fetch(
-                    "http://localhost:8080/ai/analytics/attendance",
+                    "http://https://worksphere-f0vt.onrender.com/ai/analytics/attendance",
                     {
                         headers: {
                             Authorization:
@@ -63,7 +63,7 @@ function AiAnalyticsPage({ onBack }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/ai/analytics/attendance/explanation",
+                "http://https://worksphere-f0vt.onrender.com/ai/analytics/attendance/explanation",
                 {
                     headers: {
                         Authorization:

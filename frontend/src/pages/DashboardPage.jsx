@@ -33,7 +33,7 @@ function DashboardPage({ onNotify }) {
 
                 // Attendance
                 const attendanceResponse = await fetch(
-                    "http://localhost:8080/attendance/my",
+                    "http://https://worksphere-f0vt.onrender.com/attendance/my",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -52,7 +52,7 @@ function DashboardPage({ onNotify }) {
 
                 // Payroll
                 const payrollResponse = await fetch(
-                    "http://localhost:8080/payrolls/my",
+                    "http://https://worksphere-f0vt.onrender.com/payrolls/my",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`

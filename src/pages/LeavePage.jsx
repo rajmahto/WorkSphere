@@ -37,7 +37,7 @@ function LeavePage({ onNotify, onBack }) {
             ] = await Promise.all([
 
                 fetch(
-                    "http://localhost:8080/leave-balances/my",
+                    "http://https://worksphere-f0vt.onrender.com/leave-balances/my",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -46,7 +46,7 @@ function LeavePage({ onNotify, onBack }) {
                 ),
 
                 fetch(
-                    "http://localhost:8080/leaves/my",
+                    "http://https://worksphere-f0vt.onrender.com/leaves/my",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -153,7 +153,7 @@ function LeavePage({ onNotify, onBack }) {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/leaves/my",
+                "http://https://worksphere-f0vt.onrender.com/leaves/my",
                 {
                     method: "POST",
                     headers: {

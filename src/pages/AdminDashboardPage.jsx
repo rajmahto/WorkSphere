@@ -91,27 +91,27 @@ function AdminDashboardPage({ onLogout, onNotify }) {
             ] = await Promise.all([
 
                 fetch(
-                    "http://localhost:8080/employees",
+                    "http://https://worksphere-f0vt.onrender.com/employees",
                     { headers }
                 ),
 
                 fetch(
-                    "http://localhost:8080/attendance",
+                    "http://https://worksphere-f0vt.onrender.com/attendance",
                     { headers }
                 ),
 
                 fetch(
-                    "http://localhost:8080/leaves",
+                    "http://https://worksphere-f0vt.onrender.com/leaves",
                     { headers }
                 ),
 
                 fetch(
-                    "http://localhost:8080/payrolls",
+                    "http://https://worksphere-f0vt.onrender.com/payrolls",
                     { headers }
                 ),
 
                 fetch(
-                    "http://localhost:8080/users",
+                    "http://https://worksphere-f0vt.onrender.com/users",
                     { headers }
                 )
             ]);
@@ -140,7 +140,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
 
             const payrollData =
                 await payrollResponse.json();
-            
+
             const usersData = await usersResponse.json();
             setUsers(usersData);
 
@@ -248,7 +248,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
         return (
             <AdminAttendancePage
                 onBack={() => setCurrentPage("dashboard")}
-                
+
             />
         );
     }
@@ -444,7 +444,7 @@ function AdminDashboardPage({ onLogout, onNotify }) {
                             Users
                         </span>
                     </button>
-                    
+
                     <button
                         className="hr-nav-item"
                         onClick={() => setCurrentPage("settings")}
