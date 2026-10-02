@@ -251,6 +251,31 @@ This project demonstrates practical experience with:
 - Cloud deployment
 - Database management with Neon PostgreSQL
 
+
+
+---
+
+## 📸 Screenshots
+
+### 🔐 Login Page
+![Login Page](screenshots/login.png)
+
+### 👨‍💼 Employee Dashboard
+![Employee Dashboard](screenshots/employee-dashboard.png)
+
+### 🕐 Attendance Management
+![Attendance Management](screenshots/attendance.png)
+
+### 🏖️ Leave Management
+![Leave Management](screenshots/leave-management.png)
+
+### 👨‍💼 HR Leave Management
+![HR Leave Management](screenshots/hr-leave-management.png)
+
+### 💰 Payroll / Employee Management
+![Payroll / Employee Management](screenshots/payroll.png)
+
+
 👨‍💻 Author
 
 Raj Mahto
@@ -262,3 +287,6 @@ B.Tech Computer Science & Engineering
 ⭐ Support
 
 If you find this project useful, consider giving the repository a ⭐ on GitHub.
+
+
+
