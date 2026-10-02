@@ -134,7 +134,6 @@ If Approved
 
 
 
-
 🔑 Authentication Flow
 
    User Login
@@ -159,9 +158,9 @@ JwtAuthFilter validates token
     │
     ▼
 Access granted based on user role
+```
 
-
-
+```text
 📂 Project Structure
 
 WorkSphere/
@@ -185,6 +184,8 @@ WorkSphere/
 ├── pom.xml
 ├── .gitignore
 └── README.md
+
+```
 
 
 🚀 Running Locally
