@@ -255,25 +255,30 @@ This project demonstrates practical experience with:
 
 ---
 
+---
+
 ## 📸 Screenshots
 
 ### 🔐 Login Page
-![Login Page](screenshots/login.png)
+![Login Page](Screenshot%20%281665%29.png)
 
 ### 👨‍💼 Employee Dashboard
-![Employee Dashboard](screenshots/employee-dashboard.png)
+![Employee Dashboard](Screenshot%20%281667%29.png)
 
-### 🕐 Attendance Management
-![Attendance Management](screenshots/attendance.png)
+### 🕐 Employee Attendance
+![Employee Attendance](Screenshot%20%281668%29.png)
 
-### 🏖️ Leave Management
-![Leave Management](screenshots/leave-management.png)
+### 🏖️ Employee Leave Management
+![Employee Leave Management](Screenshot%20%281669%29.png)
 
-### 👨‍💼 HR Leave Management
-![HR Leave Management](screenshots/hr-leave-management.png)
+### 👨‍💼 Admin Dashboard
+![Admin Dashboard](Screenshot%20%281670%29.png)
 
-### 💰 Payroll / Employee Management
-![Payroll / Employee Management](screenshots/payroll.png)
+### 💰 Admin Payroll
+![Admin Payroll](Screenshot%20%281671%29.png)
+
+### 📋 Leave Management
+![Leave Management](Screenshot%20%281672%29.png)
 
 
 👨‍💻 Author
