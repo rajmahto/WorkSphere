@@ -193,6 +193,8 @@ function AdminUserManagementPage({ onBack, onNotify }) {
             return;
         }
 
+        console.log("EDIT PASSWORD:", editPassword);
+
         try {
 
             const response = await fetch(
